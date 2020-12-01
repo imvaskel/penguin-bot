@@ -103,7 +103,7 @@ class FunCog(commands.Cog, name="Fun"):
         help="Translates to a given language \nUsage: `translate <language> <text>`, you can find the languages with the command languages")
     async def translate(self, ctx, language, *, arg: str):
         try:
-            translation = await self.translator.translate(arg, dest=language)
+            translation = await self.bot.translator.translate(arg, dest=language)
             embed = discord.Embed(title="Translation", decription=translation.text)
             embed.set_footer(text=f"Translated to {language} with {translation.confidence}% confidence.")
             await ctx.send(embed=embed)
