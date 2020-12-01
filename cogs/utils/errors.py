@@ -41,7 +41,7 @@ class ErrorHandler(Cog):
             c = self.bot.get_channel(770685546724982845)
             embed = discord.Embed(
                 title = "An error occurred!",
-                description = f"Reported to the support server. Need more help? [Join the support server](https://discord.gg/7yZqHfG)\n```Error: \n{str(error)}```",
+                description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{str(error)}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.set_footer(text = f"Caused by: {ctx.command}")
@@ -49,7 +49,7 @@ class ErrorHandler(Cog):
 
             #Support server embed
             embed = discord.Embed(
-                title = f"An error occured!",
+                title = f"An error occurred!",
                 description = f"```{str(error)}```",
                 timestamp = datetime.datetime.utcnow()
             )

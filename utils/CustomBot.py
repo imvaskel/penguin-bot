@@ -1,6 +1,7 @@
 import discord, configparser, asyncpg, asyncio, toml
 from discord.ext import commands
 import datetime as dt
+import aiohttp
 
 async def get_prefix(bot: commands.AutoShardedBot, message: discord.Message):
     prefix = 'p,'
@@ -19,6 +20,7 @@ class PenguinBot(commands.AutoShardedBot):
         super().__init__(get_prefix, *args, **kwargs)
         
         self.loop = asyncio.get_event_loop()
+        self.session = aiohttp.ClientSession()
 
         self.start_time = dt.datetime.now()
 
