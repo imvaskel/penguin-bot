@@ -159,10 +159,12 @@ class FunCog(commands.Cog, name="Fun"):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def mystbin(self, ctx, language = "txt", *, code):
-        """Pastes something to mystbin, `language` is optional, as this will just default to .txt or the given language of the code block. Also supports code block detection."""
+    async def mystbin(self, ctx, *, code):
+        """Pastes something to mystbin will just default to the given language of a code block. Supports code block detection"""
         code = codeblocks.codeblock_converter(code)
+        language = ""
         if code[0]: language = code[0]
+        elif not code[0]: language = "txt"
         url = await self.bot.mystbin.post(code[1], syntax = language)
         await ctx.send(embed = discord.Embed(
             title = "Your mystb.in paste",
