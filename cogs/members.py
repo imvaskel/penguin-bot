@@ -73,7 +73,7 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.command(aliases=["about"])
     async def info(self, ctx):
         """Displays bot info"""
-        botOwner = self.bot.owner
+        botOwner = self.bot.fetch_user(self.bot.owner_ids[0])
         mem = psutil.virtual_memory()
         embed = discord.Embed(title="Bot Info")
         embed.set_author(name=str(botOwner), icon_url=botOwner.avatar_url)
