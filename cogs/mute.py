@@ -30,7 +30,7 @@ class TimeConverter(commands.Converter):
                 raise commands.BadArgument("{} is not a number!".format(v))
         return time
 
-class MuteCog(commands.Cog):
+class MuteCog(commands.Cog, name = "Mute"):
     """Commands for muting, I should move this"""
     def __init__(self, bot):
         self.bot = bot

@@ -12,13 +12,13 @@ class ErrorsCog(commands.Cog, name = "Errors"):
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.reply(embed=discord.Embed(title=str(error), color=discord.Color.red()))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(embed=discord.Embed(title=str(error), color=discord.Color.red()))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, commands.BadArgument):
-            await ctx.reply(embed=discord.Embed(title=str(error), color=discord.Color.red()))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, commands.NotOwner):
-            await ctx.reply(embed=discord.Embed(title="You are not an owner.", color=discord.Color.red()))
+            await ctx.reply(embed=discord.Embed(description="You are not an owner.", color=discord.Color.red()))
         elif isinstance(error, commands.BotMissingPermissions):
             await ctx.reply(embed=discord.Embed(description=str(error)))
         elif isinstance(error, discord.NotFound):
