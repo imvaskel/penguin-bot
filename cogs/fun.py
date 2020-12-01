@@ -167,7 +167,7 @@ class FunCog(commands.Cog, name="Fun"):
         await ctx.send(embed = discord.Embed(
             title = "Your mystb.in paste",
             description=str(url),
-            timestamp=url.created_at
+            timestamp=datetime.datetime.utcnow()
         ))
 
 def setup(bot):
