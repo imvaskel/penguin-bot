@@ -20,13 +20,13 @@ class ErrorsCog(commands.Cog, name = "Errors"):
         elif isinstance(error, commands.NotOwner):
             await ctx.reply(embed=discord.Embed(description="You are not an owner.", color=discord.Color.red()))
         elif isinstance(error, commands.BotMissingPermissions):
-            await ctx.reply(embed=discord.Embed(description=str(error)))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, discord.NotFound):
-            await ctx.reply(embed=discord.Embed(description=str(error)))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.reply(embed=discord.Embed(description=str(error)))
+            await ctx.reply(embed=discord.Embed(description=str(error), color=discord.Color.red()))
         elif isinstance(error, commands.CheckFailure):
-            await ctx.reply(embed=discord.Embed(description="You are blacklisted! Contact the owner to talk about it."))
+            await ctx.reply(embed=discord.Embed(description="You are blacklisted! Contact the owner to talk about it.", color=discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
             embed = discord.Embed(
