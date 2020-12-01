@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
-from datetime import datetime
+import datetime
 
 class ErrorHandler(Cog):
     def __init__(self, bot):
@@ -18,8 +18,7 @@ class ErrorHandler(Cog):
 
         setattr(ctx, "original_author_id", getattr(ctx, "original_author_id", ctx.author.id))
         owner_reinvoke_errors = (
-            commands.MissingAnyRole, commands.MissingPermissions,
-            commands.MissingRole, commands.CommandOnCooldown, commands.DisabledCommand
+            commands.CommandOnCooldown, commands.DisabledCommand
         )
 
         if ctx.original_author_id in self.bot.owner_ids and isinstance(error, owner_reinvoke_errors):
@@ -27,26 +26,26 @@ class ErrorHandler(Cog):
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.MissingPermissions):
-            await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, commands.BadArgument):
-            await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        #elif isinstance(error, commands.NotOwner):
-            #await ctx.send(embed = discord.Embed(title = "You are not an owner.", color = discord.Color.red()))
+            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+        elif isinstance(error, commands.NotOwner):
+            await ctx.reply(embed = discord.Embed(title = "You are not an owner.", color = discord.Color.red()))
         elif isinstance(error, commands.BotMissingPermissions):
-            await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, discord.NotFound): await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.CommandOnCooldown): await ctx.send(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+        elif isinstance(error, discord.NotFound): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+        elif isinstance(error, commands.CommandOnCooldown): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         else:
-            c = bot.get_channel(#ADD YOUR ERROR CHANNEL HERE) 
+            c = self.bot.get_channel(770685546724982845)
             embed = discord.Embed(
                 title = "An error occurred!",
                 description = f"Reported to the support server. Need more help? [Join the support server](https://discord.gg/7yZqHfG)\n```Error: \n{str(error)}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.set_footer(text = f"Caused by: {ctx.command}")
-            await ctx.send(embed = embed)
+            await ctx.reply(embed = embed)
 
             #Support server embed
             embed = discord.Embed(
