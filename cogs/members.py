@@ -267,6 +267,10 @@ class MembersCog(commands.Cog, name="Meta"):
     async def support(self, ctx):
         await ctx.send("Join the support server! \n<https://penguin.vaskel.xyz/support>")
 
+    @commands.command(aliases=["code"])
+    async def source(self, ctx):
+        """Returns the GitHub for the bot"""
+        await ctx.send(embed=discord.Embed(description="https://github.com/ImVaskel/penguin-bot"))
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))
