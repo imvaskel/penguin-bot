@@ -270,7 +270,7 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.command(aliases=["code"])
     async def source(self, ctx):
         """Returns the GitHub for the bot"""
-        await ctx.send(embed=discord.Embed(description="https://github.com/ImVaskel/penguin-bot"))
+        await ctx.send(embed=discord.Embed(description="https://penguin.vaskel.xyz/github"))
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))
