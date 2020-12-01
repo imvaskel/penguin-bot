@@ -160,7 +160,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command()
     async def mystbin(self, ctx, *, code):
-        """Pastes something to mystbin will just default to the given language of a code block. Supports code block detection"""
+        """Pastes something to mystbin. It will just default to the given language of a code block and if it can't parse one, will default to .txt."""
         code = codeblocks.codeblock_converter(code)
         language = ""
         if code[0]: language = code[0]
