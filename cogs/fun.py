@@ -158,7 +158,7 @@ class FunCog(commands.Cog, name="Fun"):
             return await ctx.send(f"An error occurred, probably because the embed was invalid ``` {e} ```")
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases = ["paste"])
     async def mystbin(self, ctx, *, code):
         """Pastes something to mystbin. It will just default to the given language of a code block and if it can't parse one, will default to .txt."""
         code = codeblocks.codeblock_converter(code)
