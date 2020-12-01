@@ -32,7 +32,7 @@ class ErrorsCog(commands.Cog, name = "Errors"):
             embed = discord.Embed(
                 title="An error occurred!",
                 description=f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{str(error)}```",
-                timestamp=datetime.datetime.utcnow()
+                timestamp= datetime.utcnow()
             )
             embed.set_footer(text=f"Caused by: {ctx.command}")
             await ctx.reply(embed=embed)
