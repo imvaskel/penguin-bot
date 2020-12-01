@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 
-class Errors(commands.Cog):
+class ErrorsCog(commands.Cog, name = "Errors"):
+    """Errors stuff"""
     def __init__(self, bot):
         self.bot = bot
 
@@ -51,3 +52,6 @@ class Errors(commands.Cog):
                 """
             )
             await c.send(embed=embed)
+
+def setup(bot):
+    bot.add_cog(ErrorsCog(bot))
