@@ -1,11 +1,6 @@
 import discord
 from discord.ext import commands
-import os 
-import sys, traceback
-import json
-import configparser
-import aiohttp
-import datetime
+import os, aiohttp, datetime, sys, traceback, json, configparser, mystbin
 from aiogoogletrans import Translator
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
@@ -53,7 +48,9 @@ async def on_ready():
     bot.translator = Translator()
     bot.welcome_dict = dict(await bot.db.fetch("SELECT guild_id, channel_id FROM welcome"))
     bot.dagpi_client = Client(config['default']['dagpi'])
-    
+
+bot.mystbin = mystbin.Client()
+
 if __name__ == "__main__":
     for extension in startup_extensions:
         try:

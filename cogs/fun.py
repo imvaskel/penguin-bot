@@ -158,6 +158,17 @@ class FunCog(commands.Cog, name="Fun"):
             return await ctx.send(f"An error occurred, probably because the embed was invalid ``` {e} ```")
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def mystbin(self, ctx, language = "txt", *, code):
+        """Pastes something to mystbin, `language` is optional, as this will just default to .txt or the given language of the code block. Also supports code block detection."""
+        code = codeblocks.codeblock_converter(code)
+        if code[0]: language = code[0]
+        url = await self.bot.mystbin.post(code, syntax = language)
+        await ctx.send(embed = discord.Embed(
+            title = "Your mystb.in paste",
+            description=str(url),
+            timestamp=url.created_at
+        ))
 
 def setup(bot):
     bot.add_cog(FunCog(bot))
