@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import Cog
 import datetime
 
-class ErrorHandler(Cog):
+class ErrorHandler(Cog, name = "Errors"):
     def __init__(self, bot):
         self.bot = bot
         
