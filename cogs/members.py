@@ -298,5 +298,17 @@ class MembersCog(commands.Cog, name="Meta"):
         final_url = f'<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>'
         await ctx.send(final_url)
 
+    @commands.command()
+    async def roleinfo(self, ctx, role: discord.Role = None):
+        if not role: role = ctx.author.top_role
+        embed = discord.Embed(
+            title = f"Role Info for {role.name}",
+            color = role.color
+        )
+        embed.add_field(
+            name = "Permissions",
+            value = "   ".join([perm for perms in dict(role.permissions) if dict(role.permissions)[perm]])
+        )
+
 def setup(bot):
     bot.add_cog(MembersCog(bot))
