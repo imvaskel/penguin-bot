@@ -307,7 +307,7 @@ class MembersCog(commands.Cog, name="Meta"):
         )
         embed.add_field(
             name = "Permissions",
-            value = "   ".join([perm for perms in dict(role.permissions) if dict(role.permissions)[perm]])
+            value = "   ".join([perm for perm in dict(role.permissions) if dict(role.permissions)[perm]])
         )
         await ctx.send(embed = embed)
 
