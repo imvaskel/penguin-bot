@@ -319,7 +319,8 @@ Hoisted: {role.hoist}
 Position: {role.position}
 Mentionable: {role.mentionable}
 Color: {role.color}
-Default Role: {role.is_default()}""",
+Default Role: {role.is_default()}
+Mention: {role.mention}""",
             inline = False
         )
 
