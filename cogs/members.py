@@ -317,7 +317,8 @@ ID: {role.id}
 Hoisted: {role.hoist}
 Position: {role.position}
 Mentionable: {role.mentionable}
-Color: {role.color}"""
+Color: {role.color}""",
+            inline = False
         )
 
         await ctx.send(embed = embed)
