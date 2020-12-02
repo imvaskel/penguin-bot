@@ -302,7 +302,7 @@ class MembersCog(commands.Cog, name="Meta"):
     async def roleinfo(self, ctx, role: discord.Role = None):
         if not role: role = ctx.author.top_role
         embed = discord.Embed(
-            title = f"Role Info for {role.name}",
+            title = f"Role Info for `{role.name}`",
             color = role.color
         )
         embed.add_field(
@@ -317,7 +317,8 @@ ID: {role.id}
 Hoisted: {role.hoist}
 Position: {role.position}
 Mentionable: {role.mentionable}
-Color: {role.color}""",
+Color: {role.color}
+Default Role: {role.is_default()}""",
             inline = False
         )
 
