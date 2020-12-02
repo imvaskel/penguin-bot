@@ -301,13 +301,14 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.command()
     async def roleinfo(self, ctx, role: discord.Role = None):
         if not role: role = ctx.author.top_role
+        permsList = [perm for perm in dict(role.permissions) if dict(role.permissions)[perm]]
         embed = discord.Embed(
             title = f"Role Info for `{role.name}`",
             color = role.color
         )
         embed.add_field(
             name = "Permissions",
-            value = "   ".join([perm for perm in dict(role.permissions) if dict(role.permissions)[perm]])
+            value = "   ".join(permsList) if permsList else "No special permissions"
         )
         embed.add_field(
             name = "General Information",
