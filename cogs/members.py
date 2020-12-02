@@ -312,7 +312,7 @@ class MembersCog(commands.Cog, name="Meta"):
         embed.add_field(
             name = "General Information",
             value = f"""
-Created At: {role.created_atstrftime('%b %d, %Y %I:%M %p')}
+Created At: {role.created_at.strftime('%b %d, %Y %I:%M %p')}
 ID: {role.id}
 Hoisted: {role.hoist}
 Position: {role.position}
