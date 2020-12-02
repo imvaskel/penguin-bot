@@ -309,6 +309,7 @@ class MembersCog(commands.Cog, name="Meta"):
             name = "Permissions",
             value = "   ".join([perm for perms in dict(role.permissions) if dict(role.permissions)[perm]])
         )
+        await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))
