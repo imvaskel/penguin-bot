@@ -43,7 +43,7 @@ class ErrorHandler(Cog, name = "Errors"):
             traceback = ''.join(prettify_exceptions.DefaultFormatter().format_exception(type(error), error, error.__traceback__))
             embed = discord.Embed(
                 title = "An error occurred!",
-                description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{str(traceback)}```",
+                description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{traceback}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.set_footer(text = f"Caused by: {ctx.command}")
@@ -52,7 +52,7 @@ class ErrorHandler(Cog, name = "Errors"):
             #Support server embed
             embed = discord.Embed(
                 title = f"An error occurred!",
-                description = f"```{str(traceback)}```",
+                description = f"```{traceback}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.add_field(
