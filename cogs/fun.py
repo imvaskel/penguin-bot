@@ -69,7 +69,8 @@ class FunCog(commands.Cog, name="Fun"):
         async with self.session.get(f"https://reddit.com/r/{subreddit}/random.json?limit=1") as r:
             res = await r.json()
             s = ""
-            subredditDict = dict(res[0]['data']['children'][0]['data'])
+            try: subredditDict = dict(res[0]['data']['children'][0]['data'])
+            except KeyError: return await ctx.send("That subreddit doesn't seem to exist!")
             if subredditDict['over_18'] == True:
                 await ctx.send("\U0001f51e This subreddit or post is NSFW, sorry!")
                 return
