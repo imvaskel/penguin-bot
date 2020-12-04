@@ -1,4 +1,7 @@
+import base64
 from re import L
+from subprocess import call
+
 import discord, datetime, re, asyncio, psutil, json, time, platform, inspect, os
 from discord.embeds import Embed
 from discord.ext import commands, menus
@@ -22,12 +25,31 @@ class RolePages(SimplePages):
         converted = [RolePageEntry(entry) for entry in entries]
         super().__init__(converted, per_page=per_page)
 
+async def try_call(method, *args, exception=Exception, ret=False, **kwargs):
+    """one liner method that handles all errors in a single line which returns None, or Error instance depending on ret
+       value.
+    """
+    try:
+        return await maybe_coroutine(method, *args, **kwargs)
+    except exception as e:
+        return (None, e)[ret]
 
 class MembersCog(commands.Cog, name="Meta"):
     """Commands that give information about things"""
 
     def __init__(self, bot):
         self.bot = bot
+
+    def parse_date(self, token):
+        token_epoch = 1293840000
+        bytes_int = base64.standard_b64decode(token + "==")
+        decoded = int.from_bytes(bytes_int, "big")
+        timestamp = datetime.datetime.utcfromtimestamp(decoded)
+
+        # sometime works
+        if timestamp.year < 2015:
+            timestamp = datetime.datetime.utcfromtimestamp(decoded + token_epoch)
+        return timestamp
 
     @commands.command()
     @commands.guild_only()
@@ -325,6 +347,40 @@ Mention: {role.mention}""",
         )
 
         await ctx.send(embed = embed)
+
+    @commands.command()
+    async def parse_token(self, ctx, token):
+        token_part = token.split(".")
+        if len(token_part) != 3:
+            return await ctx.maybe_reply("Invalid token")
+
+        def decode_user(user):
+            user_bytes = user.encode()
+            user_id_decoded = base64.b64decode(user_bytes)
+            return user_id_decoded.decode("ascii")
+        str_id = call(decode_user, token_part[0])
+        if not str_id or not str_id.isdigit():
+            return await ctx.maybe_reply("Invalid user")
+        user_id = int(str_id)
+        coro_user = try_call(self.bot.fetch_user, user_id, exception=discord.NotFound)
+        member = ctx.guild.get_member(user_id) or self.bot.get_user(user_id) or await coro_user
+        if not member:
+            return await ctx.maybe_reply("Invalid user")
+        timestamp = call(self.parse_date, token_part[1]) or "Invalid date"
+
+        embed = discord.Embed(title=f"{member.display_name}'s token",
+                              description=f"**User:** `{member}`\n"
+                                          f"**ID:** `{member.id}`\n"
+                                          f"**Bot:** `{member.bot}`\n"
+                                          f"**Created:** `{member.created_at}`\n"
+                                          f"**Token Created:** `{timestamp}`",
+                              color=self.bot.color,
+                              timestamp=datetime.datetime.utcnow())
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_footer(text=f"Requested by {ctx.author}",
+                         icon_url=ctx.author.avatar_url)
+        await ctx.maybe_reply(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))
