@@ -40,6 +40,7 @@ class ErrorHandler(Cog, name = "Errors"):
         elif isinstance(error, commands.CommandOnCooldown): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
+            prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
             traceback = ''.join(prettify_exceptions.DefaultFormatter().format_exception(type(error), error, error.__traceback__))
             embed = discord.Embed(
                 title = "An error occurred!",
