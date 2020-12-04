@@ -175,6 +175,7 @@ class FunCog(commands.Cog, name="Fun"):
     @commands.command()
     @commands.cooldown(1, 5, BucketType.user)
     async def paste_file(self, ctx):
+        """Pastes the first file in the messages attachments, will auto detect if it's an image or there is no attachment. It will also autodetect the type and use that for syntax highlighting"""
         attachments = ctx.message.attachments
         if not attachments: return await ctx.send("You didn't provide an attachment")
         split_attachment = attachments[0].filename.split(".")
