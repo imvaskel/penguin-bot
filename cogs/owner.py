@@ -99,7 +99,7 @@ class OwnerCog(commands.Cog, name = "Owner"):
         await ctx.send(embed = discord.Embed(title = "Active Cogs:", description = f"```{s}```"))
 
 
-    @commands.command(name="restart", hidden=True,)
+    @commands.command(name="restart", hidden=True)
     @commands.is_owner()
     async def nopnop(self,ctx):
         """Restarts the bot

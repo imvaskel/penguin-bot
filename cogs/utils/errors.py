@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
 import datetime
+import prettify_exceptions
 
 class ErrorHandler(Cog, name = "Errors"):
     def __init__(self, bot):
@@ -39,9 +40,10 @@ class ErrorHandler(Cog, name = "Errors"):
         elif isinstance(error, commands.CommandOnCooldown): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
+            traceback = ''.join(prettify_exceptions.DefaultFormatter().format_exception(type(error), error, error.__traceback__))
             embed = discord.Embed(
                 title = "An error occurred!",
-                description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{str(error)}```",
+                description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{str(traceback)}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.set_footer(text = f"Caused by: {ctx.command}")
@@ -50,7 +52,7 @@ class ErrorHandler(Cog, name = "Errors"):
             #Support server embed
             embed = discord.Embed(
                 title = f"An error occurred!",
-                description = f"```{str(error)}```",
+                description = f"```{str(traceback)}```",
                 timestamp = datetime.datetime.utcnow()
             )
             embed.add_field(
