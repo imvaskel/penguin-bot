@@ -348,39 +348,5 @@ Mention: {role.mention}""",
 
         await ctx.send(embed = embed)
 
-    @commands.command()
-    async def parse_token(self, ctx, token):
-        token_part = token.split(".")
-        if len(token_part) != 3:
-            return await ctx.maybe_reply("Invalid token")
-
-        def decode_user(user):
-            user_bytes = user.encode()
-            user_id_decoded = base64.b64decode(user_bytes)
-            return user_id_decoded.decode("ascii")
-        str_id = call(decode_user, token_part[0])
-        if not str_id or not str_id.isdigit():
-            return await ctx.maybe_reply("Invalid user")
-        user_id = int(str_id)
-        coro_user = try_call(self.bot.fetch_user, user_id, exception=discord.NotFound)
-        member = ctx.guild.get_member(user_id) or self.bot.get_user(user_id) or await coro_user
-        if not member:
-            return await ctx.maybe_reply("Invalid user")
-        timestamp = call(self.parse_date, token_part[1]) or "Invalid date"
-
-        embed = discord.Embed(title=f"{member.display_name}'s token",
-                              description=f"**User:** `{member}`\n"
-                                          f"**ID:** `{member.id}`\n"
-                                          f"**Bot:** `{member.bot}`\n"
-                                          f"**Created:** `{member.created_at}`\n"
-                                          f"**Token Created:** `{timestamp}`",
-                              color=self.bot.color,
-                              timestamp=datetime.datetime.utcnow())
-        embed.set_thumbnail(url=member.avatar_url)
-        embed.set_footer(text=f"Requested by {ctx.author}",
-                         icon_url=ctx.author.avatar_url)
-        await ctx.maybe_reply(embed=embed)
-
-
 def setup(bot):
     bot.add_cog(MembersCog(bot))
