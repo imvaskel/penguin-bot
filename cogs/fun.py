@@ -172,5 +172,20 @@ class FunCog(commands.Cog, name="Fun"):
             timestamp=datetime.datetime.utcnow()
         ))
 
+    @commands.command()
+    @commands.cooldown(1, 5, BucketType.user)
+    async def paste_file(self, ctx):
+        attachments = ctx.message.attachments
+        if not attachments: return await ctx.send("You didn't provide an attachment")
+        split_attachment = attachments[0].filename.split(".")
+        if attachments[0].height: return await ctx.send(
+            "That file has a height, meaning it's probably an image. I can't paste those!")
+        if split_attachment[1] in ["zip", "exe", "nbt"]: return await ctx.send(
+            f"Invalid file type: `{split_attachment[1]}` is invalid.")
+        file = await attachments[0].read()
+        text = file.decode('UTF-8')
+        url = await self.bot.mystbin.post(text, syntax=split_attachment[1])
+        await ctx.send(str(url))
+
 def setup(bot):
     bot.add_cog(FunCog(bot))
