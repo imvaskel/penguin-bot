@@ -27,8 +27,10 @@ class ErrorHandler(Cog, name = "Errors"):
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument, commands.BotMissingPermissions,
-                                discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument, commands.NotOwner)):
+                                discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)):
             await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+        elif isinstance(error, commands.NotOwner):
+            await ctx.reply(embed=discord.Embed(title="You do not own this bot.", color=discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
             prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
