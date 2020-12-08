@@ -38,6 +38,7 @@ class ErrorHandler(Cog, name = "Errors"):
             await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, discord.NotFound): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, commands.CommandOnCooldown): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+        elif isinstance(error, commands.BadUnionArgument): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
             prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
