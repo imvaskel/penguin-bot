@@ -7,11 +7,14 @@ import prettify_exceptions
 class ErrorHandler(Cog, name = "Errors"):
     def __init__(self, bot):
         self.bot = bot
-        
+
     @Cog.listener()
     async def on_command_error(self, ctx, error):
         ignored_errors = (commands.CommandNotFound)
-        
+        stringed_errors = (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument,
+                           commands.BotMissingPermissions,
+                            discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)
+
         error = getattr(error, "original", error)
 
         if isinstance(error, ignored_errors):
@@ -24,8 +27,7 @@ class ErrorHandler(Cog, name = "Errors"):
 
         if ctx.original_author_id in self.bot.owner_ids and isinstance(error, owner_reinvoke_errors):
             return await ctx.reinvoke()
-        if isinstance(error, (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument, commands.BotMissingPermissions,
-                                discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)):
+        if isinstance(error, stringed_errors):
             await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, commands.NotOwner):
             await ctx.reply(embed=discord.Embed(title="You do not own this bot.", color=discord.Color.red()))
