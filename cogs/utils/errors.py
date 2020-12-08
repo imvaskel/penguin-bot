@@ -26,19 +26,9 @@ class ErrorHandler(Cog, name = "Errors"):
             return await ctx.reinvoke()
         if isinstance(error, commands.CommandNotFound):
             return
-        elif isinstance(error, commands.MissingPermissions):
+        elif isinstance(error, (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument, commands.BotMissingPermissions,
+                                discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument, commands.NotOwner)):
             await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.BadArgument):
-            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.NotOwner):
-            await ctx.reply(embed = discord.Embed(title = "You are not an owner.", color = discord.Color.red()))
-        elif isinstance(error, commands.BotMissingPermissions):
-            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, discord.NotFound): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.CommandOnCooldown): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
-        elif isinstance(error, commands.BadUnionArgument): await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         else:
             c = self.bot.get_channel(770685546724982845)
             prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
