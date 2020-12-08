@@ -83,5 +83,18 @@ class AnimalsCog(commands.Cog, name = "Animal"):
             embed.set_image(url = res['link'])
             await ctx.send(embed = embed)
 
+    @commands.command()
+    async def duck(self, ctx):
+        """Duck."""
+        async with self.session.get('https://random-d.uk/api/v2/random') as r:
+            res = await r.json()
+            if not res.keys().contains('url'):
+                return await ctx.send("An error occurred")
+            await ctx.send(embed = discord.Embed(
+                title = "Duck",
+            ).set_image(
+                url = res['url']
+            ))
+
 def setup(bot):
     bot.add_cog(AnimalsCog(bot))
