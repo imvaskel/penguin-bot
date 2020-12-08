@@ -88,7 +88,7 @@ class AnimalsCog(commands.Cog, name = "Animal"):
         """Duck."""
         async with self.session.get('https://random-d.uk/api/v2/random') as r:
             res = await r.json()
-            if 'url' not in res.keys():
+            if 'url' not in list(res.keys()):
                 return await ctx.send("An error occurred")
             await ctx.send(embed = discord.Embed(
                 title = "Duck",
