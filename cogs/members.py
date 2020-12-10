@@ -3,10 +3,9 @@ from re import L
 from subprocess import call
 
 import discord, datetime, re, asyncio, psutil, json, time, platform, inspect, os
-from discord.embeds import Embed
 from discord.ext import commands, menus
-from discord.ext.commands.core import command
 from .utils.paginator import SimplePages
+import typing
 
 
 class RolePageEntry:
@@ -39,17 +38,6 @@ class MembersCog(commands.Cog, name="Meta"):
 
     def __init__(self, bot):
         self.bot = bot
-
-    def parse_date(self, token):
-        token_epoch = 1293840000
-        bytes_int = base64.standard_b64decode(token + "==")
-        decoded = int.from_bytes(bytes_int, "big")
-        timestamp = datetime.datetime.utcfromtimestamp(decoded)
-
-        # sometime works
-        if timestamp.year < 2015:
-            timestamp = datetime.datetime.utcfromtimestamp(decoded + token_epoch)
-        return timestamp
 
     @commands.command()
     @commands.guild_only()
@@ -119,23 +107,33 @@ class MembersCog(commands.Cog, name="Meta"):
 
     @commands.command(aliases=['whois'],
                       help="Returns information about a user, if left blank will return the author's info.")
-    async def userinfo(self, ctx, user: discord.Member = None):
+    async def userinfo(self, ctx, user: typing.Union[discord.Member, discord.User] = None):
         statuses = {'online': discord.Color.green(), 'dnd': discord.Color.red(), 'idle': discord.Color.gold(),
                     'offline': discord.Color.dark_grey()}
-        if not user: user = ctx.author
+        user = user or ctx.author
         msgAuthor = ctx.author
+        embed = discord.Embed()
 
-        # Easy one liner for getting roles
-        roles = ["None"] if len(user.roles) == 1 else [i.mention for i in user.roles if i.name != "@everyone"]
-        roles = "\n".join(roles)
+        if isinstance(user, discord.Member):
+            roles = ["None"] if len(user.roles) == 1 else [i.mention for i in user.roles if i.name != "@everyone"]
+            roles = "\n".join(roles)
+            embed = discord.Embed(title=f"{str(user)}",
+                                  description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: {user.joined_at.strftime('%b %d, %Y %I:%M %p')}",
+                                  timestamp=datetime.datetime.utcnow(), color=statuses[str(user.status)])
+            embed.set_thumbnail(url=user.avatar_url)
+            embed.set_footer(text=f"Requested by {str(msgAuthor)}", icon_url=msgAuthor.avatar_url)
+            embed.add_field(name="Info:", value=f"Nickname: {user.nick} \nID: {user.id}")
+            embed.add_field(name="Roles:", value=roles)
 
-        embed = discord.Embed(title=f"{str(user)}",
-                              description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: {user.joined_at.strftime('%b %d, %Y %I:%M %p')}",
-                              timestamp=datetime.datetime.utcnow(), color=statuses[str(user.status)])
-        embed.set_thumbnail(url=user.avatar_url)
-        embed.set_footer(text=f"Requested by {str(msgAuthor)}", icon_url=msgAuthor.avatar_url)
-        embed.add_field(name="Info:", value=f"Nickname: {user.nick} \nID: {user.id}")
-        embed.add_field(name="Roles:", value=roles)
+        elif isinstance(user, discord.User):
+            embed = discord.Embed(title=f"{str(user)}",
+                                  description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: {user.joined_at.strftime('%b %d, %Y %I:%M %p')}",
+                                  timestamp=datetime.datetime.utcnow(), color=statuses[str(user.status)])
+            embed.set_thumbnail(url=user.avatar_url)
+            embed.set_footer(text=f"Requested by {str(msgAuthor)} NOTE: This user is not in the guild.", icon_url=msgAuthor.avatar_url)
+
+        else:
+            embed = discord.Embed(title = "An error occurred.")
         await ctx.send(embed=embed)
 
     @commands.command(help="Returns an invite for bot.")
