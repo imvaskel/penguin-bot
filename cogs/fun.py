@@ -183,7 +183,7 @@ class FunCog(commands.Cog, name="Fun"):
         # Checking for text
         elif not ctx.message.attachments:
             paste = codeblocks.codeblock_converter(paste)
-            url = await self.bot.mystbin.post(paste[1], language=paste[0])
+            url = await self.bot.mystbin.post(paste[1], syntax=paste[0])
             return await ctx.send(str(url))
 
 def setup(bot):
