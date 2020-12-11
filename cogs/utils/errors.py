@@ -7,6 +7,7 @@ import prettify_exceptions
 class ErrorHandler(Cog, name = "Errors"):
     def __init__(self, bot):
         self.bot = bot
+        self.ignored_events = ["on_member_join", "on_message", "on_raw_reaction_add"]
 
     @Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -58,6 +59,14 @@ class ErrorHandler(Cog, name = "Errors"):
                 """
             )
             await c.send(embed = embed)
+
+    @Cog.listener()
+    async def on_error(self, event, *args, **kwargs):
+        if event in self.ignored_events:
+            return
+        else:
+            raise
+
 
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))

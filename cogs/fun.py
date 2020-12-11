@@ -161,7 +161,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(aliases = ["mystbin"])
     @commands.cooldown(1, 30, BucketType.user)
-    async def paste(self,ctx, paste: str = None):
+    async def paste(self, ctx, paste: str = None):
         """Pastes a file to mystbin, attempts to check for an attachment first, and if it cannot detect one, goes to text, and will error if it can't find that. You can also use codeblocks and it will detect text in that. Detects file extension."""
         if not paste and not ctx.message.attachments:
             return await ctx.send("You didn't provide anything to paste")
