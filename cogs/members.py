@@ -346,5 +346,12 @@ Mention: {role.mention}""",
 
         await ctx.send(embed = embed)
 
+    @commands.command(aliases = ["pfp"])
+    async def avatar(self, ctx, user: discord.Member):
+        user = user or ctx.author
+        await ctx.send(embed = discord.Embed(
+            title = f"{str(user)}'s profile picture"
+        ).set_image(url = str(user.avatar_url)))
+
 def setup(bot):
     bot.add_cog(MembersCog(bot))
