@@ -51,6 +51,14 @@ async def on_ready():
 
 bot.mystbin = mystbin.Client()
 
+@bot.event
+async def on_error(event, *args, **kwargs):
+    ignored_events = ["on_member_join", "on_message", "on_raw_reaction_add"]
+    if event in ignored_events:
+        return
+    else:
+        raise
+
 if __name__ == "__main__":
     for extension in startup_extensions:
         try:
