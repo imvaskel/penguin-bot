@@ -347,7 +347,7 @@ Mention: {role.mention}""",
         await ctx.send(embed = embed)
 
     @commands.command(aliases = ["pfp"])
-    async def avatar(self, ctx, user: discord.Member):
+    async def avatar(self, ctx, user: discord.Member = None):
         user = user or ctx.author
         await ctx.send(embed = discord.Embed(
             title = f"{str(user)}'s profile picture"
