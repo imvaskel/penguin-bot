@@ -218,7 +218,6 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
             {guild.id} replaces with the guilds id
             ```
         """
-        if len(message) > 250: return await ctx.send("Welcome message can only be 250 chars at most!")
         await self.bot.db.execute("UPDATE guild_config SET welcomeMessage = $1 WHERE id = $2", message, ctx.guild.id)
         await ctx.send(f"Changed the welcome message to ```{message}```")
         self.bot.cache[ctx.guild.id]["welcomeMessage"] = message
