@@ -261,7 +261,7 @@ class OwnerCog(commands.Cog, name = "Owner"):
     
     @commands.command(hidden = True)
     @commands.is_owner()
-    async def blacklist_user(self, ctx, user: discord.User):
+    async def blacklist(self, ctx, user: discord.User):
         try: 
             await self.bot.db.execute("INSERT INTO blacklist(id) VALUES($1)", user.id)
             await ctx.reply("User blacklisted.")
