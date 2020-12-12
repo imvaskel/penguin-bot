@@ -31,6 +31,8 @@ class ErrorHandler(Cog, name = "Errors"):
             await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
         elif isinstance(error, commands.NotOwner):
             await ctx.reply(embed=discord.Embed(title="You do not own this bot.", color=discord.Color.red()))
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.reply(embed = discord.Embed(title = "You are blacklisted, join the support server to find out more https://penguin.vaskel.xyz/support"))
         else:
             c = self.bot.get_channel(770685546724982845)
             prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
