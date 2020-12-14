@@ -47,8 +47,8 @@ class ListenerCog(commands.Cog, name = "Listener"):
             title = "Guild Joined!",
             description = f"""```yaml
 Guild Name - {str(guild)}
-Guild ID - {int(guild)}
-Guild Owner - {str(guild.owner)} [{int(guild.owner)}]
+Guild ID - {guild.id}
+Guild Owner - {str(guild.owner)} [{guild.id}]
 Guild Created - {guild.created_at.strftime('%b %d, %Y %I:%M %p')}
 Guild Members - {len(guild.members)}
 ```""",
@@ -70,8 +70,8 @@ Guild Members - {len(guild.members)}
             title = "Guild Left!",
             description = f"""```yaml
 Guild Name - {str(guild)}
-Guild ID - {int(guild)}
-Guild Owner - {str(guild.owner)} [{int(guild.owner)}]
+Guild ID - {guild.id}
+Guild Owner - {str(guild.owner)} [{guild.owner.id}]
 Guild Created - {guild.created_at.strftime('%b %d, %Y %I:%M %p')}
 Guild Members - {len(guild.members)}
 ```""",
