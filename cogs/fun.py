@@ -100,24 +100,6 @@ class FunCog(commands.Cog, name="Fun"):
             embed = discord.Embed(title="Joke", description=res['joke'])
             await ctx.send(embed=embed)
 
-    @commands.command(
-        help="Translates to a given language \nUsage: `translate <language> <text>`, you can find the languages with the command languages")
-    async def translate(self, ctx, language, *, arg: str):
-        try:
-            translation = await self.bot.translator.translate(arg, dest=language)
-            embed = discord.Embed(title="Translation", decription=translation.text)
-            embed.set_footer(text=f"Translated to {language} with {translation.confidence}% confidence.")
-            await ctx.send(embed=embed)
-        except ValueError:
-            await ctx.send(embed=discord.Embed(description="Invalid language, use `languages` to see them.",
-                                               color=discord.Color.red()))
-
-    @commands.command(help="Returns languages and their codes for usage in translation.")
-    async def languages(self, ctx):
-        embed = discord.Embed(title="Translation Languages")
-        embed.set_footer(text=LANGUAGES)
-        await ctx.send(embed=embed)
-
     @commands.command(help="Turns the data given into a qr code")
     async def qr(self, ctx, *, data):
         data = data.replace(" ", "+")
@@ -169,15 +151,21 @@ class FunCog(commands.Cog, name="Fun"):
         # Checking for attachment first
         elif not paste:
             attachments = ctx.message.attachments
-            if attachments[0].height: return await ctx.send(
-                "That file has a height, meaning it's probably an image. I can't paste those!")
+            if attachments[0].height:
+                return await ctx.send(
+                    "That file has a height, meaning it's probably an image. I can't paste those!")
+
             if attachments[0].size // 1000000 > 8: return await ctx.send("That's too large of a file!")
+
             split_attachment = attachments[0].filename.split(".")
+
             if split_attachment[1] in ["zip", "exe", "nbt"]: return await ctx.send(
                 f"Invalid file type: `{split_attachment[1]}` is invalid.")
+
             file = await attachments[0].read()
             text = file.decode('UTF-8')
             url = await self.bot.mystbin.post(text, syntax=split_attachment[1])
+
             return await ctx.send(str(url))
 
         # Checking for text

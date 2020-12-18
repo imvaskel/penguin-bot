@@ -353,5 +353,11 @@ Mention: {role.mention}""",
             title = f"{str(user)}'s profile picture"
         ).set_image(url = str(user.avatar_url)))
 
+    @commands.command()
+    async def vote(self, ctx):
+        """Returns voting links"""
+        embed = discord.Embed(title = "__Voting Links__",
+                              description = "[Top.GG](https://top.gg/bot/753037464599527485) \n[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)")
+
 def setup(bot):
     bot.add_cog(MembersCog(bot))
