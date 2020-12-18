@@ -359,5 +359,7 @@ Mention: {role.mention}""",
         embed = discord.Embed(title = "__Voting Links__",
                               description = "[Top.GG](https://top.gg/bot/753037464599527485) \n[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)")
 
+        await ctx.send(embed = embed)
+
 def setup(bot):
     bot.add_cog(MembersCog(bot))
