@@ -172,19 +172,44 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
         await ctx.send(embed = discord.Embed(description = l, color = discord.Color.from_rgb(48,162,242)))
     
     @commands.guild_only()
-    @commands.group(hidden=True, name="log")
+    @commands.group(name="log")
     async def log_group(self, ctx):
         """A command that deals with the bots logging."""
         if ctx.invoked_subcommand is None:
-            await ctx.send(f'No subcommand passed.')
+            await ctx.send_help(ctx.command)
     
-    @commands.command()
+    @log_group.command(name = 'set')
     @commands.guild_only()
     @commands.has_permissions(manage_guild = True)
-    async def set_log(self, ctx, id: discord.TextChannel):
-        """Currently does nothing, please ignore"""
-        return
-    
+    async def set_log(self, ctx, channel: discord.TextChannel):
+        if not channel.permissions_for(ctx.me).send_messages:
+            raise commands.BadArgument("I cannot send messages in that channel. Please give me permissions to send messages in that channel.")
+
+        await self.bot.db.execute("""UPDATE guild_config SET log_id = $1 WHERE id = $2""", channel.id, ctx.guild.id)
+
+        await ctx.reply(discord.Embed(description = f"Set {channel.mention} to this guild's log channel."))
+
+    @log_group.command(name='set')
+    @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
+    async def remove_log(self, ctx):
+        if not self.bot.cache[ctx.guild.id]['logId']:
+            raise commands.BadArgument("This guild does not have a log channel set.")
+
+        await self.bot.db.execute("UPDATE guild_config SET log_id = NULL WHERE id = $1", ctx.guild.id)
+
+        await ctx.reply("Successfully removed the log channel for this guild.")
+
+    @log_group.command(name='view')
+    @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
+    async def view_log(self, ctx):
+        if logId := self.bot.cache[ctx.guild.id]['logId']:
+            channel = ctx.guild.get_channel(logId)
+            await ctx.reply(f"The log channel for this server is {channel.id}")
+        else:
+            raise commands.BadArgument("This guild has no log channel set.")
+
     @commands.guild_only()
     @commands.group(name = "welcomer")
     async def welcomer_group(self, ctx):

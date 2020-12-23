@@ -51,8 +51,16 @@ class PenguinBot(commands.AutoShardedBot):
             d = {
                 record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
                                "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
-                               "welcomeId": record["welcomeid"]}}
+                               "welcomeId": record["welcomeid"], "logId": record['log_id']}}
             self.cache.update(d)
+
+    def refresh_template(self, record: asyncpg.Record):
+        d = {
+            record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
+                           "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
+                           "welcomeId": record["welcomeid"], "logId": record['log_id']}
+        }
+        return d
 
     async def refresh_cache(self):
         records = await self.db.fetch("SELECT * FROM guild_config")
@@ -77,3 +85,7 @@ class PenguinBot(commands.AutoShardedBot):
         self.db = await asyncpg.connect(user=self.config['default']['db_user'],
                                         password=self.config['default']['db_password'],
                                         database=self.config['default']['db_name'], host='127.0.0.1')
+
+    async def refresh_cache_for(self, guildId):
+        record = await self.db.fetchrow("SELECT * FROM guild_config WHERE id = $1", guildId)
+        self.cache.update(self.refresh_template(record))
