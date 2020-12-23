@@ -3,6 +3,7 @@ from discord.ext import commands
 import datetime as dt
 import aiohttp
 
+
 async def get_prefix(bot: commands.AutoShardedBot, message: discord.Message):
     prefix = 'p,'
 
@@ -15,10 +16,11 @@ async def get_prefix(bot: commands.AutoShardedBot, message: discord.Message):
         elif not message.guild.id in bot.prefixes:
             return commands.when_mentioned_or(*prefix)(bot, message)
 
+
 class PenguinBot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(get_prefix, *args, **kwargs)
-        
+
         self.loop = asyncio.get_event_loop()
         self.session = aiohttp.ClientSession()
 
@@ -26,7 +28,9 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.config = toml.load('config.toml')
 
-        self.db = self.loop.run_until_complete(asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'], database=self.config['default']['db_name'], host='127.0.0.1'))
+        self.db = self.loop.run_until_complete(
+            asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'],
+                            database=self.config['default']['db_name'], host='127.0.0.1'))
 
         # Cache stuff
         self.stats = {}
@@ -45,15 +49,19 @@ class PenguinBot(commands.AutoShardedBot):
 
         for record in records:
             d = {
-  record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"], "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"], "welcomeId": record["welcomeid"]}}
+                record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
+                               "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
+                               "welcomeId": record["welcomeid"]}}
             self.cache.update(d)
 
     async def refresh_cache(self):
         records = await self.db.fetch("SELECT * FROM guild_config")
         for record in records:
             d = {
-  record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"], "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"], "welcomeId": record["welcomeid"]}
-}  
+                record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
+                               "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
+                               "welcomeId": record["welcomeid"], "logId": record['log_id']}
+            }
             self.cache.update(d)
 
     async def cache_reactionroles(self):
@@ -66,4 +74,6 @@ class PenguinBot(commands.AutoShardedBot):
 
     async def refresh_connection(self):
         await self.db.close()
-        self.db = await asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'], database=self.config['default']['db_name'], host='127.0.0.1')
+        self.db = await asyncpg.connect(user=self.config['default']['db_user'],
+                                        password=self.config['default']['db_password'],
+                                        database=self.config['default']['db_name'], host='127.0.0.1')
