@@ -48,7 +48,7 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
         if user == ctx.author.id: return await ctx.send("You can't do that to yourself!")
         member = discord.Object(id = user)
         try:
-            await ctx.guild.unban(member, reason = f"{ctx.author} [{ctx.author}] - {reason}")
+            await ctx.guild.unban(member, reason = f"{ctx.author} [{ctx.author.id}] - {reason}")
             await ctx.send(embed = discord.Embed(description = f"Unbanned {member.id} for {reason}."))
         except discord.NotFound: return await ctx.send(embed = discord.Embed(description = "That user doesn't seem to be banned."))
 
