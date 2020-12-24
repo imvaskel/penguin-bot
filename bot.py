@@ -5,7 +5,9 @@ from aiogoogletrans import Translator
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
 
-startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute", 'cogs.animals', 'cogs.listener', 'cogs.help_command', 'cogs.images', 'cogs.utils.errors']
+startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
+                      'cogs.animals', 'cogs.listener', 'cogs.help_command', 'cogs.images',
+                      'cogs.utils.errors', 'listeners.guilds', 'listeners.moderation']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
