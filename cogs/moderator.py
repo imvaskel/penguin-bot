@@ -187,7 +187,7 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
 
         await self.bot.db.execute("""UPDATE guild_config SET log_id = $1 WHERE id = $2""", channel.id, ctx.guild.id)
 
-        await ctx.reply(discord.Embed(description = f"Set {channel.mention} to this guild's log channel."))
+        await ctx.reply(embed = discord.Embed(description = f"Set {channel.mention} to this guild's log channel."))
 
     @log_group.command(name='remove')
     @commands.guild_only()

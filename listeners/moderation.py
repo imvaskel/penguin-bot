@@ -17,7 +17,7 @@ class ModerationListener(commands.Cog):
             l = [f"User Name: {user.name}", f"User ID: {user.id}"]
 
             if guild.me.guild_permissions.view_audit_log:
-                log = await guild.me.audit_logs(limit = 1).flatten()
+                log = await guild.audit_logs(limit = 1).flatten()
                 log = log[0]
                 if log.action is discord.AuditLogAction.unban:
                     mod = log.user
