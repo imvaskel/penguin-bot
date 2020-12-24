@@ -22,9 +22,9 @@ class ModerationListener(commands.Cog):
                 if log.action is discord.AuditLogAction.unban:
                     mod = log.user
                     l.append(f"Moderator: {mod} [{mod.id}]")
-                    l.append(f"Reason \n{log.reason}")
+                    l.append(f"Reason: \n ```{log.reason}```")
             try:
-                embed = discord.Embed(title = "User unbanned",
+                embed = discord.Embed(title = "User Unbanned!",
                                       description = "\n".join(l))
                 await channel.send(embed = embed)
             except:

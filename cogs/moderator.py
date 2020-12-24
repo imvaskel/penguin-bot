@@ -32,6 +32,7 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
         guild = ctx.guild
         try: await member.send(f"You were banned from {guild.name} for {reason}")
         except discord.HTTPException: pass
+        reason = f"{ctx.author} [{ctx.author.id} - " + reason
         await guild.ban(member, reason = reason)
         await ctx.send(f"{member.name} was banned for {reason}.")
 
@@ -45,7 +46,7 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
         member = discord.Object(id = user)
         try: 
             await ctx.guild.unban(member)
-            await ctx.send(embed  = discord.Embed(description = f"Unbanned {member.id} for {reason}."))
+            await ctx.send(embed = discord.Embed(description = f"Unbanned {member.id} for {reason}."))
         except discord.NotFound: return await ctx.send(embed = discord.Embed(description = "That user doesn't seem to be banned."))
 
     @commands.has_permissions(manage_messages=True)
@@ -119,6 +120,7 @@ class ModeratorCog(commands.Cog, name = "Moderator"):
         if member.id == ctx.author.id: return await ctx.send("You can't do that to yourself!") 
         if member.top_role > ctx.me.top_role or member.top_role == ctx.me.top_role: return await ctx.send("That member's top role is higher or equal to mine!")
         guild = ctx.guild
+        reason = f"{ctx.author} [{ctx.author.id} - " + reason
         try: await member.send(f"You were banned from {guild.name} for {reason}")
         except discord.HTTPException: pass
         await guild.ban(member, delete_message_days = 0, reason = reason)
