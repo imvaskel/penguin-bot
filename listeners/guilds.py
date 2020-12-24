@@ -11,7 +11,7 @@ class GuildsListener(commands.Cog):
         botPercent = sum(m.bot for m in guild.members) / guild.member_count
         if botPercent >= self.limit:
             try:
-                await guild.owner.send(f"It seems your guild has over {self.limit * 100}% bot to user ratio, it has automatically left. If you think this is an error, please join the support server at https://penguin.vaskel.xyz/support.")
+                await guild.owner.send(f"It seems your guild has over {self.limit * 100}% bot to user ratio, it has automatically left. If you think this is an error, please join the support server at https://penguin.vaskel.xyz/support and ask in #help.")
             except:
                 pass
             await guild.leave()
