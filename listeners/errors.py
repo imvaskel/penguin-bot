@@ -3,6 +3,14 @@ from discord.ext import commands
 from discord.ext.commands import Cog
 import datetime
 import prettify_exceptions
+from datetime import datetime
+
+class ErrorEmbed(discord.Embed):
+    def __init__(self, description, **kwargs):
+        super().__init__(color = discord.Color.red(),
+                         title = "An error occurred!",
+                         description = description,
+                         timestamp = datetime.utcnow())
 
 class ErrorHandler(Cog, name = "Errors"):
     def __init__(self, bot):
@@ -28,28 +36,25 @@ class ErrorHandler(Cog, name = "Errors"):
         if ctx.original_author_id in self.bot.owner_ids and isinstance(error, owner_reinvoke_errors):
             return await ctx.reinvoke()
         if isinstance(error, stringed_errors):
-            await ctx.reply(embed = discord.Embed(title = str(error), color = discord.Color.red()))
+            await ctx.reply(embed = ErrorEmbed(description=str(error)))
         elif isinstance(error, commands.NotOwner):
-            await ctx.reply(embed=discord.Embed(title="You do not own this bot.", color=discord.Color.red()))
+            await ctx.reply(embed=ErrorEmbed(description="You do not own this bot."))
         elif isinstance(error, commands.CheckFailure):
-            await ctx.reply(embed = discord.Embed(title = "You are blacklisted, join the support server to find out more https://penguin.vaskel.xyz/support"))
+            await ctx.reply(embed = ErrorEmbed(description = "You are blacklisted, join the support server to find out more https://penguin.vaskel.xyz/support"))
+
         else:
             c = self.bot.get_channel(770685546724982845)
             prettify_exceptions.DefaultFormatter().theme['_ansi_enabled'] = False
             traceback = ''.join(prettify_exceptions.DefaultFormatter().format_exception(type(error), error, error.__traceback__))
-            embed = discord.Embed(
-                title = "An error occurred!",
+            embed = ErrorEmbed(
                 description = f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{traceback}```",
-                timestamp = datetime.datetime.utcnow()
             )
             embed.set_footer(text = f"Caused by: {ctx.command}")
             await ctx.reply(embed = embed)
 
             #Support server embed
-            embed = discord.Embed(
-                title = f"An error occurred!",
+            embed = ErrorEmbed(
                 description = f"```{traceback}```",
-                timestamp = datetime.datetime.utcnow()
             )
             embed.add_field(
                 name = "Details:",
