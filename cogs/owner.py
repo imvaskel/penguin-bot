@@ -71,29 +71,22 @@ class OwnerCog(commands.Cog, name="Owner"):
     @commands.command(hidden=True, aliases=["reloadall", "ra"])
     @commands.is_owner()
     async def reload_all(self, ctx):
-        s = []
-        e = []
-        l = []
+        succesful = []
+        unseccesful = []
 
-        for cog in os.listdir("cogs/"):
-            if ".py" in cog:
-                l.append(f"cogs.{cog[:-3]}")
-
-        for cog in l:
+        for cog in self.bot.extensions:
             try:
-                self.bot.unload_extension(cog)
-                self.bot.load_extension(cog)
-                s.append(cog)
-            except Exception as p:
-                e.append(cog)
+                self.bot.reload_extension(cog)
+                succesful.append(cog)
+            except:
+                unseccesful.append(cog)
 
-        embed = discord.Embed(title="Reloaded all cogs")
-        embed.add_field(name="Succesful Cogs", value=str.join("   ", s))
-        p = str.join("   ", e)
-        if p == "":
-            p = "None"
-        embed.add_field(name="Unsuccesful Cogs", value=p)
-        await ctx.send(embed=embed)
+        embed = discord.Embed(title = "Reloaded all extensions")
+
+        embed.add_field(name = "Successful", value = "\t".join(succesful) or "None")
+        embed.add_field(name ="Unsuccessful", value="\t".join(unseccesful) or "None")
+
+        await ctx.send(embed = embed)
 
     @commands.command(name='cogs', hidden=True)
     @commands.is_owner()

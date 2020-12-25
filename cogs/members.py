@@ -289,8 +289,8 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.is_owner()
     async def change_status(self, ctx, id: int, status: str):
         """Change the status of a suggestion, use `approved`, `rejected`, or `new`"""
-        embColors = {"approved": discord.Color.green(
-        ), "rejected": discord.Color.red(), "new": discord.Color.teal()}
+        embColors = {"approved": discord.Color.green(),
+                     "rejected": discord.Color.red(), "new": discord.Color.teal()}
         s = await self.bot.db.fetch("SELECT id FROM suggestions")
         if id not in range(1, len(s) + 1):
             await ctx.send("Invalid ID")
