@@ -40,10 +40,8 @@ class MembersCog(commands.Cog, name="Meta"):
         self.bot = bot
 
         self.perms_emotes = [
-            # "<:redTick:775792645728895038>",
-            "❌",
-            # "<:greentick:770685801297215488>"
-            "✅"
+            "<:redTick:775792645728895038>",
+            "<:greentick:770685801297215488>"
         ]
 
     def _filter_perms(self, perms: discord.Permissions):
@@ -93,8 +91,7 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.guild_only()
     async def check_permissions(self, ctx, *, member: discord.Member = None):
         """Returns permissions"""
-        member = member if member else ctx.guild.me
-        # member = member if member else ctx.author
+        member = member if member else ctx.author
         filtered = self._get_filtered_perms()
         types = {k: [] for k in filtered.keys()}
         embed = discord.Embed(title=f"Permissions for {member} in {ctx.guild}")
