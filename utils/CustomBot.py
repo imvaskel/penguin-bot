@@ -8,8 +8,11 @@ import datetime as dt
 import aiohttp
 
 
-async def get_prefix(bot: commands.AutoShardedBot, message: discord.Message):
+async def get_prefix(bot, message: discord.Message):
     prefix = 'p,'
+
+    if message.content.startswith(('jsk', 'eval')) and message.author.id in bot.owner_ids:
+        return ""
 
     if not message.guild:
         return commands.when_mentioned_or(*prefix)(bot, message)

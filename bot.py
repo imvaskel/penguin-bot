@@ -43,7 +43,7 @@ bot = PenguinBot(description='',
                      roles=False, users=True, everyone=False, replied_user=False),
                  embed_color=0x31A1F1,
                  activity=activity,
-                 owner_ids=[447422100798570496])
+                 owner_ids={447422100798570496})
 
 
 @bot.check
