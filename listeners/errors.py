@@ -60,18 +60,17 @@ class ErrorHandler(Cog, name="Errors"):
             embed.set_footer(text=f"Caused by: {ctx.command}")
             await ctx.reply(embed=embed)
 
-
             # Support server embed
             embed = ErrorEmbed(
-                description= f"```{url or traceback}```",
+                description=f"```{url or traceback}```",
             )
             embed.add_field(
                 name="Details:",
-                value=f"""
-                Caused by: `{str(ctx.author)} [{ctx.author.id}]`
-                In guild: `{str(ctx.guild)} [{ctx.guild.id}]`
-                Command: `{ctx.command}`
-                """
+                value=(
+                    f"Caused by: `{str(ctx.author)} [{ctx.author.id}]`"
+                    f"In guild: `{str(ctx.guild)} [{ctx.guild.id}]`"
+                    f"Command: `{ctx.command}`"
+                )
             )
             await c.send(embed=embed)
 

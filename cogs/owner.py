@@ -82,12 +82,14 @@ class OwnerCog(commands.Cog, name="Owner"):
             except:
                 unseccesful.append(cog)
 
-        embed = discord.Embed(title = "Reloaded all extensions")
+        embed = discord.Embed(title="Reloaded all extensions")
 
-        embed.add_field(name = "Successful", value = "\t".join(succesful) or "None")
-        embed.add_field(name ="Unsuccessful", value="\t".join(unseccesful) or "None")
+        embed.add_field(name="Successful",
+                        value="\t".join(succesful) or "None")
+        embed.add_field(name="Unsuccessful",
+                        value="\t".join(unseccesful) or "None")
 
-        await ctx.send(embed = embed)
+        await ctx.send(embed=embed)
 
     @commands.command(name='cogs', hidden=True)
     @commands.is_owner()

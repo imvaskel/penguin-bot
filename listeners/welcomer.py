@@ -12,10 +12,12 @@ template_vars = {
 template_re = re.compile('({})'.format(
     '|'.join(re.escape(var) for var in template_vars)))
 
+
 def format_message(member, template):
     def replacer(match):
         return template_vars[match.group(1)](member)
     return template_re.sub(replacer, template)
+
 
 class WelcomerListener(commands.Cog):
     def __init__(self, bot):
@@ -43,6 +45,7 @@ class WelcomerListener(commands.Cog):
                         return
         except KeyError:
             return
+
 
 def setup(bot):
     bot.add_cog(WelcomerListener(bot))

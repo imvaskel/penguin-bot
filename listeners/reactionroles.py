@@ -17,5 +17,6 @@ class ReactionRolesListener(commands.Cog):
         else:
             return
 
+
 def setup(bot):
     bot.add_cog(ReactionRolesListener(bot))

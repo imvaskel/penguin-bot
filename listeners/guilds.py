@@ -30,13 +30,13 @@ class GuildsListener(commands.Cog):
         embed = discord.Embed(
             title="Guild Left!",
             description=("```yaml\n"
-                f"Guild Name - {guild}\n"
-                f"Guild ID - {guild.id}\n"
-                f"Guild Owner - {guild.owner} [{guild.owner.id}]\n"
-                f"Guild Created - {guild.created_at.strftime('%b %d, %Y %I:%M %p')}\n"
-                f"Guild Members - {len(guild.members)}\n"
-                "```"
-                ),
+                         f"Guild Name - {guild}\n"
+                         f"Guild ID - {guild.id}\n"
+                         f"Guild Owner - {guild.owner} [{guild.owner.id}]\n"
+                         f"Guild Created - {guild.created_at.strftime('%b %d, %Y %I:%M %p')}\n"
+                         f"Guild Members - {len(guild.members)}\n"
+                         "```"
+                         ),
             timestamp=datetime.datetime.utcnow()
         )
         await c.send(embed=embed)
@@ -72,7 +72,6 @@ class GuildsListener(commands.Cog):
             timestamp=datetime.datetime.utcnow()
         )
         await c.send(embed=embed)
-
 
 
 def setup(bot):

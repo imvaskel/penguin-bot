@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from utils.CustomBot import PenguinBot
 
+
 class ModeratorCog(commands.Cog, name="Moderator"):
     """Commands for moderators"""
 
