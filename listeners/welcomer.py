@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import re
+from utils.CustomBot import PenguinBot
+from contextlib import suppress
 
 template_vars = {
     '{user.mention}': lambda m: m.mention,
@@ -20,7 +22,7 @@ def format_message(member, template):
 
 
 class WelcomerListener(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: PenguinBot):
         self.bot = bot
 
     @commands.Cog.listener()
@@ -46,6 +48,13 @@ class WelcomerListener(commands.Cog):
         except KeyError:
             return
 
+    @commands.Cog.listener('on_member_join')
+    async def autorole(self, member: discord.Member):
+        guildinfo = self.bot.cache
+        if guildinfo['autorole']:
+            with suppress(discord.Forbidden):
+                role = member.guild.get_role(guildinfo['autorole'])
+                await member.add_roles(role, reason = "Autorole")
 
 def setup(bot):
     bot.add_cog(WelcomerListener(bot))
