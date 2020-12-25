@@ -159,8 +159,6 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.command(aliases=['whois'],
                       help="Returns information about a user, if left blank will return the author's info.")
     async def userinfo(self, ctx, user: typing.Union[discord.Member, discord.User] = None):
-        statuses = {'online': discord.Color.green(), 'dnd': discord.Color.red(), 'idle': discord.Color.gold(),
-                    'offline': discord.Color.dark_grey()}
         user = user or ctx.author
         msgAuthor = ctx.author
         embed = discord.Embed()
@@ -171,7 +169,7 @@ class MembersCog(commands.Cog, name="Meta"):
             roles = "\n".join(roles)
             embed = discord.Embed(title=f"{str(user)}",
                                   description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: {user.joined_at.strftime('%b %d, %Y %I:%M %p')}",
-                                  timestamp=datetime.datetime.utcnow(), color=statuses[str(user.status)])
+                                  timestamp=datetime.datetime.utcnow(), color=user.top_role.color)
             embed.set_thumbnail(url=user.avatar_url)
             embed.set_footer(
                 text=f"Requested by {str(msgAuthor)}", icon_url=msgAuthor.avatar_url)
@@ -182,7 +180,7 @@ class MembersCog(commands.Cog, name="Meta"):
         elif isinstance(user, discord.User):
             embed = discord.Embed(title=f"{str(user)}",
                                   description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: User is not in the guild",
-                                  timestamp=datetime.datetime.utcnow(), color=statuses['offline'])
+                                  timestamp=datetime.datetime.utcnow(), color= self.bot.embed_color)
             embed.set_thumbnail(url=user.avatar_url)
             embed.set_footer(
                 text=f"Requested by {str(msgAuthor)} NOTE: This user is not in the guild.", icon_url=msgAuthor.avatar_url)

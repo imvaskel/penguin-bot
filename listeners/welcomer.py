@@ -54,7 +54,9 @@ class WelcomerListener(commands.Cog):
         if guildinfo['autorole']:
             with suppress(discord.Forbidden):
                 role = member.guild.get_role(guildinfo['autorole'])
-                await member.add_roles(role, reason = "Autorole")
+                await member.add_roles(role, reason="Autorole")
+
+    # TODO Add leaver too, more cache tho
 
 def setup(bot):
     bot.add_cog(WelcomerListener(bot))

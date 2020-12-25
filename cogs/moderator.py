@@ -150,5 +150,6 @@ class ModeratorCog(commands.Cog, name="Moderator"):
         await guild.ban(member, delete_message_days=0, reason=audit)
         await ctx.send(f"{member.name} was banned for {audit}.")
 
+
 def setup(bot):
     bot.add_cog(ModeratorCog(bot))

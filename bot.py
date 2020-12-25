@@ -16,8 +16,8 @@ startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun'
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
 
-intents = discord.Intents.all()
-
+intents = discord.Intents.default()
+intents.members = True
 
 async def get_prefix(bot, message):
     prefix = 'p,'
