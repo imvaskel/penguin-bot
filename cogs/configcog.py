@@ -171,7 +171,7 @@ class ConfigCog(commands.Cog, name = "config"):
     async def autorole_group(self, ctx):
         """Autorole commands"""
         if ctx.invoked_subcommand is None:
-            await ctx.send("No subcommand passed, use `help autorole` for help.")
+            await ctx.send_help(ctx.command)
 
     @autorole_group.command(name="add")
     @commands.guild_only()
@@ -183,6 +183,7 @@ class ConfigCog(commands.Cog, name = "config"):
             return await ctx.send("That role is either above me or is my top role!")
         await self.bot.db.execute("UPDATE guild_config SET autorole = $1 WHERE id = $2", role.id, ctx.guild.id)
         await ctx.send(embed=discord.Embed(description=f"Added autorole for role {role.mention}."))
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @autorole_group.command(name="remove")
     @commands.guild_only()
@@ -191,6 +192,7 @@ class ConfigCog(commands.Cog, name = "config"):
         """Removes guilds autorole"""
         await self.bot.db.execute("UPDATE guild_config SET autorole = null WHERE id = $1", ctx.guild.id)
         await ctx.send(embed=discord.Embed(description=f"Removed autorole"))
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @autorole_group.command(name="role")
     @commands.guild_only()
