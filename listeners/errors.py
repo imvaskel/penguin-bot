@@ -68,7 +68,7 @@ class ErrorHandler(Cog, name="Errors"):
             embed.add_field(
                 name="Details:",
                 value=f"""
-                Caused by: `{str(ctx.author)} [{ctx.author}.id]`
+                Caused by: `{str(ctx.author)} [{ctx.author.id}]`
                 In guild: `{str(ctx.guild)} [{ctx.guild.id}]`
                 Command: `{ctx.command}`
                 """
