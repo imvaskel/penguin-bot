@@ -9,10 +9,9 @@ class ConfigCog(commands.Cog, name = "config"):
     async def cog_check(self, ctx):
         return ctx.author.guild_permissions.manage_guild
 
-    @commands.Cog.listener('cog_command_error')
-    async def check_failed(self, ctx, error):
+    async def cog_command_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.reply(embed = ErrorEmbed("You do not have the `manage guild` permission."))
+            await ctx.reply(embed = ErrorEmbed(description="You don't have the `mange guilds permission`"))
         else:
             raise error
 
