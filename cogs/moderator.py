@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
-
+from utils.CustomBot import PenguinBot
 
 class ModeratorCog(commands.Cog, name="Moderator"):
     """Commands for moderators"""
 
-    def __init__(self, bot):
+    def __init__(self, bot: PenguinBot):
         self.bot = bot
 
     @commands.command()
@@ -217,6 +217,8 @@ class ModeratorCog(commands.Cog, name="Moderator"):
 
         await ctx.reply(embed=discord.Embed(description=f"Set {channel.mention} to this guild's log channel."))
 
+        await self.bot.refresh_cache_for(ctx.guild.id)
+
     @log_group.command(name='remove')
     @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
@@ -228,6 +230,8 @@ class ModeratorCog(commands.Cog, name="Moderator"):
         await self.bot.db.execute("UPDATE guild_config SET log_id = NULL WHERE id = $1", ctx.guild.id)
 
         await ctx.reply("Successfully removed the log channel for this guild.")
+
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @log_group.command(name='view')
     @commands.guild_only()
@@ -274,7 +278,7 @@ class ModeratorCog(commands.Cog, name="Moderator"):
         """
         await self.bot.db.execute("UPDATE guild_config SET welcomeMessage = $1 WHERE id = $2", message, ctx.guild.id)
         await ctx.send(f"Changed the welcome message to ```{message}```")
-        self.bot.cache[ctx.guild.id]["welcomeMessage"] = message
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @welcomer_group.command(name="delete", aliases=["remove_channel"])
     @commands.guild_only()
@@ -283,8 +287,7 @@ class ModeratorCog(commands.Cog, name="Moderator"):
         """Removes the welcomer channel, which also disables the bot welcoming."""
         await self.bot.db.execute("UPDATE guild_config SET welcomeId = NULL")
         await ctx.send(embed=discord.Embed(description=f"Removed the welcome channel and disabled welcomer."))
-        self.bot.cache[ctx.guild.id]["welcomeEnabled"] = False
-        self.bot.cache[ctx.guild.id]["welcomeId"] = None
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @welcomer_group.command(name="disable")
     @commands.guild_only()
@@ -294,7 +297,7 @@ class ModeratorCog(commands.Cog, name="Moderator"):
             return await ctx.send("Welcomer is already disabled!")
         await self.bot.db.execute("UPDATE guild_config SET welcomeEnabled = FALSE")
         await ctx.send("Disabled the welcomer, use `welcomer enable` to reenable")
-        self.bot.cache[ctx.guild.id]["welcomeEnabled"] = False
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @welcomer_group.command(name="enable")
     @commands.guild_only()
@@ -304,7 +307,7 @@ class ModeratorCog(commands.Cog, name="Moderator"):
             return await ctx.send("Welcomer is already enabled!")
         await self.bot.db.execute("UPDATE guild_config SET welcomeEnabled = TRUE")
         await ctx.send("Enabled the welcomer, use `welcomer disable` to disable")
-        self.bot.cache[ctx.guild.id]["welcomeEnabled"] = True
+        await self.bot.refresh_cache_for(ctx.guild.id)
 
     @commands.group(name="autorole", aliases=["autoroles"])
     @commands.guild_only()
