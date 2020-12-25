@@ -25,8 +25,10 @@ class ErrorHandler(Cog, name="Errors"):
                            commands.BotMissingPermissions,
                            discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)
 
-        if ctx.cog.qualified_name in ("config") and isinstance(error, commands.CheckFailure):
-            return
+        cog = ctx.cog
+        if cog:
+            if cog._get_overridden_method(cog.cog_command_error) is not None:
+                return
 
         error = getattr(error, "original", error)
 
