@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 
-
 class ModerationListener(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -29,9 +28,6 @@ class ModerationListener(commands.Cog):
                 await channel.send(embed=embed)
             except:
                 return
-        else:
-            return
-
 
 def setup(bot):
     bot.add_cog(ModerationListener(bot))

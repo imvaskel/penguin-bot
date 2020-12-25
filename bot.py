@@ -1,11 +1,6 @@
 import discord
 from discord.ext import commands
 import os
-import aiohttp
-import datetime
-import sys
-import traceback
-import json
 import configparser
 import mystbin
 from aiogoogletrans import Translator
@@ -14,11 +9,11 @@ from utils.CustomBot import PenguinBot
 
 startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
                       'cogs.animals', 'cogs.listener', 'cogs.help_command', 'cogs.images',
-                      'listeners.errors', 'listeners.guilds', 'listeners.moderation']
+                      'listeners.errors', 'listeners.guilds', 'listeners.moderation',
+                      'listeners.reactionsroles', 'listeners.welcomer']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
-os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 
 intents = discord.Intents.all()
 
