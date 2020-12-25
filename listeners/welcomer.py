@@ -50,7 +50,7 @@ class WelcomerListener(commands.Cog):
 
     @commands.Cog.listener('on_member_join')
     async def autorole(self, member: discord.Member):
-        guildinfo = self.bot.cache
+        guildinfo = self.bot.cache[member.guild.id]
         if guildinfo['autorole']:
             with suppress(discord.Forbidden):
                 role = member.guild.get_role(guildinfo['autorole'])
