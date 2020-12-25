@@ -8,7 +8,23 @@ class ModerationListener(commands.Cog):
 
     @commands.Cog.listener('on_member_ban')
     async def on_ban(self, guild, user):
-        return
+        if logId := self.bot.cache[guild.id]['logId']:
+            channel = guild.get_channel(logId)
+            returnList = [f"User Name: {user.name}", f"User ID: {user.id}"]
+
+            if guild.me.guild_permissions.view_audit_log:
+                log = await guild.audit_logs(limit=1).flatten()
+                log = log[0]
+                if log.action is discord.AuditLogAction.ban:
+                    mod = log.user
+                    returnList.append(f"Moderator: {mod} [{mod.id}]")
+                    returnList.append(f"Reason: \n ```{log.reason}```")
+            try:
+                embed = discord.Embed(title="User Banned!",
+                                      description="\n".join(returnList))
+                await channel.send(embed=embed)
+            except discord.Forbidden:
+                return
 
     @commands.Cog.listener('on_member_unban')
     async def on_unban(self, guild, user):

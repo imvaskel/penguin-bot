@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from utils.CustomBot import PenguinBot
+from contextlib import suppress
 
 
 class ModeratorCog(commands.Cog, name="Moderator"):
@@ -39,11 +40,9 @@ class ModeratorCog(commands.Cog, name="Moderator"):
 
         guild = ctx.guild
 
-        try:
+        with suppress(discord.HTTPException):
             await member.send(f"You were banned from {guild.name} for {reason}")
 
-        except discord.HTTPException:
-            pass
         reason = f"{ctx.author} [{ctx.author.id}] - {reason}"
         await guild.ban(member, reason=reason)
         await ctx.send(f"{member.name} was banned for {reason}.")
