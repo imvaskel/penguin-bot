@@ -73,8 +73,9 @@ class OwnerCog(commands.Cog, name="Owner"):
     async def reload_all(self, ctx):
         succesful = []
         unseccesful = []
+        extensions = self.bot.extensions.keys()
 
-        for cog in self.bot.extensions:
+        for cog in extensions:
             try:
                 self.bot.reload_extension(cog)
                 succesful.append(cog)
