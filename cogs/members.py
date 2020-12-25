@@ -29,7 +29,7 @@ async def try_call(method, *args, exception=Exception, ret=False, **kwargs):
        value.
     """
     try:
-        return await maybe_coroutine(method, *args, **kwargs)
+        return await discord.utils.maybe_coroutine(method, *args, **kwargs)
     except exception as e:
         return (None, e)[ret]
 
@@ -38,6 +38,46 @@ class MembersCog(commands.Cog, name="Meta"):
 
     def __init__(self, bot):
         self.bot = bot
+
+        self.perms_emotes = [
+            "<:redTick:775792645728895038>",
+            "<:greentick:770685801297215488>"
+        ]
+
+    def _filter_perms(self, perms: discord.Permissions):
+        ret = []
+
+        # v = permission's (name, value)
+        for filtered in filter(lambda v: v[1], perms):
+            ret.append(filtered[0])
+        return ret
+
+    def _get_filtered_perms(self):
+        permissions = (
+            discord.Permissions.text(),
+            discord.Permissions.voice(),
+            discord.Permissions.general()
+        )
+        filtered = {
+            "text": None,
+            "voice": None,
+            "general": None
+        }
+
+        for key, obj in zip(filtered.keys(), permissions):
+            filtered[key] = self._filter_perms(obj)
+        return filtered
+
+    def _format_perm_name(self, name: str):
+        name = name.title()
+        replacements = (
+            ("_", " ",)
+            ("Tts", "TTS")
+        )
+
+        for sub, repl in replacements:
+            name = name.replace(sub, repl)
+        return name
 
     @commands.command()
     @commands.guild_only()
@@ -51,26 +91,25 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.guild_only()
     async def check_permissions(self, ctx, *, member: discord.Member = None):
         """Returns permissions"""
-        if not member: member = ctx.author
-        p_t = ""
-        p_v = ""
-        p_g = ""
-        l = ["<:redTick:775792645728895038>", "<:greentick:770685801297215488>"]
-        perms = dict(member.guild_permissions)
-        perms_text = dict(discord.Permissions.text())
-        perms_voice = dict(discord.Permissions.voice())
-        perms_general = dict(discord.Permissions.general())
-        for i in perms:
-            if perms_text[i]:
-                p_t += f"{l[perms[i]]} {i}\n"
-            elif perms_voice[i]:
-                p_v += f"{l[perms[i]]} {i}\n"
-            elif perms_general[i]:
-                p_g += f"{l[perms[i]]} {i}\n"
-        embed = discord.Embed(title=f"Permissions for {str(member)} in {str(ctx.guild)}")
-        embed.add_field(name="Text Permissions", value=p_t)
-        embed.add_field(name="Voice Permissions", value=p_v)
-        embed.add_field(name="General Permissions", value=p_g)
+        member = member if member else ctx.author
+        filtered = self._get_filtered_perms()
+        types = {k: [] for k in filtered.keys()}
+        embed = discord.Embed(title=f"Permissions for {member} in {ctx.guild}")
+
+        for key, value in member.guild_permissions:
+            for channel_type, names in filtered.items():
+                if key in names:
+                    name = self._format_perm_name(key)
+                    emote = self.perms_emotes[value]
+                    types[channel_type].append((name, emote))
+                    break
+
+        for key, perms in types.items():
+            sorted_ = sorted(perms, key=lambda v: v[0])
+            formatted = [f"{e} {n}" for n, e in sorted_]
+            value = ("\n").join(formatted)
+
+            embed.add_field(name=f"{key.title()} Permissions", value=value)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["about"])
