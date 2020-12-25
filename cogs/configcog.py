@@ -11,7 +11,7 @@ class ConfigCog(commands.Cog, name = "config"):
 
     async def cog_command_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.reply(embed = ErrorEmbed(description="You don't have the `mange guilds permission`"))
+            return await ctx.reply(embed = ErrorEmbed(description="You don't have the `mange guilds` permission."))
         else:
             raise error
 
