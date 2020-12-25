@@ -19,11 +19,14 @@ class ErrorHandler(Cog, name="Errors"):
         self.bot = bot
 
     @Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx: commands.Context, error):
         ignored_errors = (commands.CommandNotFound)
         stringed_errors = (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument,
                            commands.BotMissingPermissions,
                            discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)
+
+        if ctx.cog.qualified_name in ("config") and isinstance(error, commands.CheckFailure):
+            return
 
         error = getattr(error, "original", error)
 
