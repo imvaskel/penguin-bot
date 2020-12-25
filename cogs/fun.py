@@ -1,6 +1,11 @@
 import discord
 from discord.ext import commands
-import aiohttp, datetime, asyncio, io, configparser, time
+import aiohttp
+import datetime
+import asyncio
+import io
+import configparser
+import time
 from collections import deque
 from aiogoogletrans import Translator, LANGUAGES
 from discord.ext.commands.cooldowns import BucketType
@@ -69,8 +74,10 @@ class FunCog(commands.Cog, name="Fun"):
         async with self.session.get(f"https://reddit.com/r/{subreddit}/random.json?limit=1") as r:
             res = await r.json()
             s = ""
-            try: subredditDict = dict(res[0]['data']['children'][0]['data'])
-            except KeyError: return await ctx.send("That subreddit doesn't seem to exist!")
+            try:
+                subredditDict = dict(res[0]['data']['children'][0]['data'])
+            except KeyError:
+                return await ctx.send("That subreddit doesn't seem to exist!")
             if subredditDict['over_18'] == True:
                 await ctx.send("\U0001f51e This subreddit or post is NSFW, sorry!")
                 return
@@ -79,7 +86,8 @@ class FunCog(commands.Cog, name="Fun"):
                                   url=f"https://reddit.com{subredditDict['permalink']}")
 
             if subredditDict['selftext'] != "":
-                embed.add_field(name="Post Content:", value=subredditDict['selftext'])
+                embed.add_field(name="Post Content:",
+                                value=subredditDict['selftext'])
             else:
                 embed.set_image(url=subredditDict['url'])
             embed.set_footer(text=f"Author: {subredditDict['author']}")
@@ -104,7 +112,8 @@ class FunCog(commands.Cog, name="Fun"):
     async def qr(self, ctx, *, data):
         data = data.replace(" ", "+")
         embed = discord.Embed(title="QR Code", description=data)
-        embed.set_image(url=f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data}")
+        embed.set_image(
+            url=f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data}")
         await ctx.send(embed=embed)
 
     @commands.is_owner()
@@ -112,12 +121,14 @@ class FunCog(commands.Cog, name="Fun"):
     async def screenshot(self, ctx, url):
         start = time.perf_counter()
 
-        embed = discord.Embed(title=f"Screenshot of {url}", color=discord.Color.from_rgb(48, 162, 242))
+        embed = discord.Embed(
+            title=f"Screenshot of {url}", color=discord.Color.from_rgb(48, 162, 242))
         async with self.session.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
             res = await r.read()
             embed.set_image(url="attachment://pp.png")
             end = time.perf_counter()
-            embed.set_footer(text=f"Image fetched in {round((end - start) * 1000)} ms")
+            embed.set_footer(
+                text=f"Image fetched in {round((end - start) * 1000)} ms")
             await ctx.send(file=discord.File(io.BytesIO(res), filename="pp.png"), embed=embed)
 
     @commands.command(aliases=["quickpoll"])
@@ -141,7 +152,7 @@ class FunCog(commands.Cog, name="Fun"):
             return await ctx.send(f"An error occurred, probably because the embed was invalid ``` {e} ```")
         await ctx.send(embed=embed)
 
-    @commands.command(aliases = ["mystbin"])
+    @commands.command(aliases=["mystbin"])
     @commands.cooldown(1, 30, BucketType.user)
     async def paste(self, ctx, paste: str = None):
         """Pastes a file to mystbin, attempts to check for an attachment first, and if it cannot detect one, goes to text, and will error if it can't find that. You can also use codeblocks and it will detect text in that. Detects file extension."""
@@ -155,12 +166,14 @@ class FunCog(commands.Cog, name="Fun"):
                 return await ctx.send(
                     "That file has a height, meaning it's probably an image. I can't paste those!")
 
-            if attachments[0].size // 1000000 > 8: return await ctx.send("That's too large of a file!")
+            if attachments[0].size // 1000000 > 8:
+                return await ctx.send("That's too large of a file!")
 
             split_attachment = attachments[0].filename.split(".")
 
-            if split_attachment[1] in ["zip", "exe", "nbt"]: return await ctx.send(
-                f"Invalid file type: `{split_attachment[1]}` is invalid.")
+            if split_attachment[1] in ["zip", "exe", "nbt"]:
+                return await ctx.send(
+                    f"Invalid file type: `{split_attachment[1]}` is invalid.")
 
             file = await attachments[0].read()
             text = file.decode('UTF-8')
@@ -173,6 +186,7 @@ class FunCog(commands.Cog, name="Fun"):
             paste = codeblocks.codeblock_converter(paste)
             url = await self.bot.mystbin.post(paste[1], syntax=paste[0])
             return await ctx.send(str(url))
+
 
 def setup(bot):
     bot.add_cog(FunCog(bot))

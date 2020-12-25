@@ -1,6 +1,13 @@
 import discord
 from discord.ext import commands
-import os, aiohttp, datetime, sys, traceback, json, configparser, mystbin
+import os
+import aiohttp
+import datetime
+import sys
+import traceback
+import json
+import configparser
+import mystbin
 from aiogoogletrans import Translator
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
@@ -11,9 +18,10 @@ startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun'
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
-os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True" 
+os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 
 intents = discord.Intents.all()
+
 
 async def get_prefix(bot, message):
     prefix = 'p,'
@@ -30,19 +38,23 @@ async def get_prefix(bot, message):
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-activity = discord.Activity(type=discord.ActivityType.listening, name="@Penguin")
+activity = discord.Activity(
+    type=discord.ActivityType.listening, name="@Penguin")
 
 
-bot = PenguinBot(description='', 
-                intents = intents, 
-                allowed_mentions =discord.AllowedMentions(roles=False, users=True, everyone=False, replied_user = False),
-                embed_color = 0x31A1F1,
-                activity = activity,
-                owner_ids = [447422100798570496])
+bot = PenguinBot(description='',
+                 intents=intents,
+                 allowed_mentions=discord.AllowedMentions(
+                     roles=False, users=True, everyone=False, replied_user=False),
+                 embed_color=0x31A1F1,
+                 activity=activity,
+                 owner_ids=[447422100798570496])
+
 
 @bot.check
 async def blacklisted(ctx):
     return ctx.author.id not in bot.blacklistedUsers
+
 
 @bot.event
 async def on_ready():
@@ -52,6 +64,7 @@ async def on_ready():
     bot.dagpi_client = Client(config['default']['dagpi'])
 
 bot.mystbin = mystbin.Client()
+
 
 @bot.event
 async def on_error(event, *args, **kwargs):
@@ -71,4 +84,4 @@ if __name__ == "__main__":
 
 botSecret = config['default']['BOT_SECRET']
 bot.nasa_api = config['default']['NASA_API']
-bot.run(botSecret, bot = True)
+bot.run(botSecret, bot=True)

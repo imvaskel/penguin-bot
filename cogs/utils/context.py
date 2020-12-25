@@ -3,6 +3,7 @@ import asyncio
 import discord
 import io
 
+
 class _ContextDBAcquire:
     __slots__ = ('ctx', 'timeout')
 
@@ -19,6 +20,7 @@ class _ContextDBAcquire:
 
     async def __aexit__(self, *args):
         await self.ctx.release()
+
 
 class Context(commands.Context):
     def __init__(self, **kwargs):

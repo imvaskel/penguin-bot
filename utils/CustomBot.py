@@ -1,4 +1,8 @@
-import discord, configparser, asyncpg, asyncio, toml
+import discord
+import configparser
+import asyncpg
+import asyncio
+import toml
 from discord.ext import commands
 import datetime as dt
 import aiohttp
@@ -38,14 +42,18 @@ class PenguinBot(commands.AutoShardedBot):
         self.cache = {}
         self.disabledCommands = []
         self.blacklistedUsers = []
-        self.reactionRoleDict = self.loop.run_until_complete(self.cache_reactionroles())
+        self.reactionRoleDict = self.loop.run_until_complete(
+            self.cache_reactionroles())
 
-        records = self.loop.run_until_complete(self.db.fetch("SELECT * FROM blacklist"))
+        records = self.loop.run_until_complete(
+            self.db.fetch("SELECT * FROM blacklist"))
         for i in records:
             self.blacklistedUsers.append(i["id"])
 
-        records = self.loop.run_until_complete(self.db.fetch("SELECT * FROM guild_config"))
-        self.prefixes = dict(self.loop.run_until_complete(self.db.fetch("SELECT id, prefix FROM guild_config")))
+        records = self.loop.run_until_complete(
+            self.db.fetch("SELECT * FROM guild_config"))
+        self.prefixes = dict(self.loop.run_until_complete(
+            self.db.fetch("SELECT id, prefix FROM guild_config")))
 
         for record in records:
             d = {
@@ -78,7 +86,8 @@ class PenguinBot(commands.AutoShardedBot):
     async def refresh_blacklist(self):
         records = await self.db.fetch("SELECT * FROM blacklist")
         self.blacklistedUsers = []
-        for i in records: self.blacklistedUsers.append(i["id"])
+        for i in records:
+            self.blacklistedUsers.append(i["id"])
 
     async def refresh_connection(self):
         await self.db.close()

@@ -17,21 +17,20 @@ class ModerationListener(commands.Cog):
             l = [f"User Name: {user.name}", f"User ID: {user.id}"]
 
             if guild.me.guild_permissions.view_audit_log:
-                log = await guild.audit_logs(limit = 1).flatten()
+                log = await guild.audit_logs(limit=1).flatten()
                 log = log[0]
                 if log.action is discord.AuditLogAction.unban:
                     mod = log.user
                     l.append(f"Moderator: {mod} [{mod.id}]")
                     l.append(f"Reason: \n ```{log.reason}```")
             try:
-                embed = discord.Embed(title = "User Unbanned!",
-                                      description = "\n".join(l))
-                await channel.send(embed = embed)
+                embed = discord.Embed(title="User Unbanned!",
+                                      description="\n".join(l))
+                await channel.send(embed=embed)
             except:
                 return
         else:
             return
-
 
 
 def setup(bot):

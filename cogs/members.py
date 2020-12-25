@@ -2,7 +2,16 @@ import base64
 from re import L
 from subprocess import call
 
-import discord, datetime, re, asyncio, psutil, json, time, platform, inspect, os
+import discord
+import datetime
+import re
+import asyncio
+import psutil
+import json
+import time
+import platform
+import inspect
+import os
 from discord.ext import commands, menus
 from .utils.paginator import SimplePages
 import typing
@@ -24,6 +33,7 @@ class RolePages(SimplePages):
         converted = [RolePageEntry(entry) for entry in entries]
         super().__init__(converted, per_page=per_page)
 
+
 async def try_call(method, *args, exception=Exception, ret=False, **kwargs):
     """one liner method that handles all errors in a single line which returns None, or Error instance depending on ret
        value.
@@ -32,6 +42,7 @@ async def try_call(method, *args, exception=Exception, ret=False, **kwargs):
         return await discord.utils.maybe_coroutine(method, *args, **kwargs)
     except exception as e:
         return (None, e)[ret]
+
 
 class MembersCog(commands.Cog, name="Meta"):
     """Commands that give information about things"""
@@ -71,7 +82,7 @@ class MembersCog(commands.Cog, name="Meta"):
     def _format_perm_name(self, name: str):
         name = name.title()
         replacements = (
-            ("_", " ",)
+            ("_", " "),
             ("Tts", "TTS")
         )
 
@@ -122,7 +133,8 @@ class MembersCog(commands.Cog, name="Meta"):
         embed.set_footer(text=self.bot.user, icon_url=self.bot.user.avatar_url)
         embed.add_field(name="About me",
                         value=f"Hello, I am a bot made by {str(botOwner)} in discord.py! \n[Support Server](https://penguin.vaskel.xyz/invite).")
-        embed.add_field(name=f"Servers: {len(self.bot.guilds)}", value=f"Users: {len(self.bot.users)}")
+        embed.add_field(
+            name=f"Servers: {len(self.bot.guilds)}", value=f"Users: {len(self.bot.users)}")
         embed.add_field(name="Usage:",
                         value=f"```{mem[0] / 1000000} MB total \n{mem[1] / 1000000} MB available ({100 - mem[2]}%)```",
                         inline=False)
@@ -154,14 +166,17 @@ class MembersCog(commands.Cog, name="Meta"):
         embed = discord.Embed()
 
         if isinstance(user, discord.Member):
-            roles = ["None"] if len(user.roles) == 1 else [i.mention for i in user.roles if i.name != "@everyone"]
+            roles = ["None"] if len(user.roles) == 1 else [
+                i.mention for i in user.roles if i.name != "@everyone"]
             roles = "\n".join(roles)
             embed = discord.Embed(title=f"{str(user)}",
                                   description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: {user.joined_at.strftime('%b %d, %Y %I:%M %p')}",
                                   timestamp=datetime.datetime.utcnow(), color=statuses[str(user.status)])
             embed.set_thumbnail(url=user.avatar_url)
-            embed.set_footer(text=f"Requested by {str(msgAuthor)}", icon_url=msgAuthor.avatar_url)
-            embed.add_field(name="Info:", value=f"Nickname: {user.nick} \nID: {user.id}")
+            embed.set_footer(
+                text=f"Requested by {str(msgAuthor)}", icon_url=msgAuthor.avatar_url)
+            embed.add_field(
+                name="Info:", value=f"Nickname: {user.nick} \nID: {user.id}")
             embed.add_field(name="Roles:", value=roles)
 
         elif isinstance(user, discord.User):
@@ -169,10 +184,11 @@ class MembersCog(commands.Cog, name="Meta"):
                                   description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: User is not in the guild",
                                   timestamp=datetime.datetime.utcnow(), color=statuses['offline'])
             embed.set_thumbnail(url=user.avatar_url)
-            embed.set_footer(text=f"Requested by {str(msgAuthor)} NOTE: This user is not in the guild.", icon_url=msgAuthor.avatar_url)
+            embed.set_footer(
+                text=f"Requested by {str(msgAuthor)} NOTE: This user is not in the guild.", icon_url=msgAuthor.avatar_url)
 
         else:
-            embed = discord.Embed(title = "An error occurred.")
+            embed = discord.Embed(title="An error occurred.")
         await ctx.send(embed=embed)
 
     @commands.command(help="Returns an invite for bot.")
@@ -185,7 +201,8 @@ class MembersCog(commands.Cog, name="Meta"):
     async def prefixes(self, ctx):
         """Displays bots prefixes for the current server"""
         p = await self.bot.get_prefix(ctx.message)
-        l = [i for i in p if i not in (f'<@{self.bot.user.id}> ', f'<@!{self.bot.user.id}> ',)]
+        l = [i for i in p if i not in (
+            f'<@{self.bot.user.id}> ', f'<@!{self.bot.user.id}> ',)]
         await ctx.send(
             embed=discord.Embed(description=f"My prefix for this guild is `{l[0]}`, but you can also mention me!",
                                 color=discord.Color.from_rgb(48, 162, 242)))
@@ -201,9 +218,11 @@ class MembersCog(commands.Cog, name="Meta"):
     async def serverinfo(self, ctx):
         """Displays the server info"""
         guild = ctx.guild
-        embed = discord.Embed(title=f"Info about {guild.name} ({guild.id})", description=guild.description)
+        embed = discord.Embed(
+            title=f"Info about {guild.name} ({guild.id})", description=guild.description)
         embed.set_thumbnail(url=str(guild.icon_url))
-        embed.add_field(name="Member Count", value=f"Members: {guild.member_count}")
+        embed.add_field(name="Member Count",
+                        value=f"Members: {guild.member_count}")
         embed.add_field(name="Owner", value=str(guild.owner), inline=True)
         embed.add_field(name="Region", value=guild.region, inline=True)
         embed.add_field(name="Emojis", value=len(guild.emojis), inline=True)
@@ -216,7 +235,8 @@ class MembersCog(commands.Cog, name="Meta"):
             await ctx.send("Suggestion is too long! It must be below 200 chars!")
             return
         channel = self.bot.get_channel(765978141881139220)
-        embed = discord.Embed(title="New Suggestion", timestamp=datetime.datetime.utcnow(), url=ctx.message.jump_url)
+        embed = discord.Embed(
+            title="New Suggestion", timestamp=datetime.datetime.utcnow(), url=ctx.message.jump_url)
         embed.add_field(name=f"Suggestion #{len(await self.bot.db.fetch('SELECT id FROM suggestions')) + 1}",
                         value=suggestion)
         embed.set_footer(text=f"Suggested By: {str(ctx.author)}")
@@ -246,18 +266,21 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.group(name="suggestion", aliases=["suggestions"])
     @commands.guild_only()
     async def suggestion(self, ctx):
-        if ctx.invoked_subcommand is None: await ctx.send("No subcommand invoked, please use `help suggestion`!")
+        if ctx.invoked_subcommand is None:
+            await ctx.send("No subcommand invoked, please use `help suggestion`!")
 
     @suggestion.command()
     @commands.guild_only()
     async def view(self, ctx, suggestion: int):
         """Allows you to view a suggestion"""
-        colors = {"approved": discord.Color.green(), "rejected": discord.Color.red(), "new": discord.Color.teal()}
+        colors = {"approved": discord.Color.green(
+        ), "rejected": discord.Color.red(), "new": discord.Color.teal()}
         s = await self.bot.db.fetchrow("SELECT * FROM suggestions WHERE ID = $1", suggestion)
         if s is None:
             await ctx.send("Invalid suggestion number")
             return
-        embed = discord.Embed(title=f"Suggestion #{s['id']}", color=colors[s['status']], timestamp=s['date'])
+        embed = discord.Embed(
+            title=f"Suggestion #{s['id']}", color=colors[s['status']], timestamp=s['date'])
         embed.add_field(name="Status:", value=s['status'])
         embed.add_field(name="Content:", value=s['text'], inline=False)
         await ctx.send(embed=embed)
@@ -266,7 +289,8 @@ class MembersCog(commands.Cog, name="Meta"):
     @commands.is_owner()
     async def change_status(self, ctx, id: int, status: str):
         """Change the status of a suggestion, use `approved`, `rejected`, or `new`"""
-        embColors = {"approved": discord.Color.green(), "rejected": discord.Color.red(), "new": discord.Color.teal()}
+        embColors = {"approved": discord.Color.green(
+        ), "rejected": discord.Color.red(), "new": discord.Color.teal()}
         s = await self.bot.db.fetch("SELECT id FROM suggestions")
         if id not in range(1, len(s) + 1):
             await ctx.send("Invalid ID")
@@ -359,19 +383,22 @@ class MembersCog(commands.Cog, name="Meta"):
 
     @commands.command()
     async def roleinfo(self, ctx, role: discord.Role = None):
-        if not role: role = ctx.author.top_role
-        permsList = [perm for perm in dict(role.permissions) if dict(role.permissions)[perm]]
+        if not role:
+            role = ctx.author.top_role
+        permsList = [perm for perm in dict(
+            role.permissions) if dict(role.permissions)[perm]]
         embed = discord.Embed(
-            title = f"Role Info for `{role.name}`",
-            color = role.color
+            title=f"Role Info for `{role.name}`",
+            color=role.color
         )
         embed.add_field(
-            name = "Permissions",
-            value = "   ".join(permsList) if permsList else "No special permissions"
+            name="Permissions",
+            value="   ".join(
+                permsList) if permsList else "No special permissions"
         )
         embed.add_field(
-            name = "General Information",
-            value = f"""
+            name="General Information",
+            value=f"""
 Created At: {role.created_at.strftime('%b %d, %Y %I:%M %p')}
 ID: {role.id}
 Hoisted: {role.hoist}
@@ -380,25 +407,26 @@ Mentionable: {role.mentionable}
 Color: {role.color}
 Default Role: {role.is_default()}
 Mention: {role.mention}""",
-            inline = False
+            inline=False
         )
 
-        await ctx.send(embed = embed)
+        await ctx.send(embed=embed)
 
-    @commands.command(aliases = ["pfp"])
+    @commands.command(aliases=["pfp"])
     async def avatar(self, ctx, user: discord.Member = None):
         user = user or ctx.author
-        await ctx.send(embed = discord.Embed(
-            title = f"{str(user)}'s profile picture"
-        ).set_image(url = str(user.avatar_url)))
+        await ctx.send(embed=discord.Embed(
+            title=f"{str(user)}'s profile picture"
+        ).set_image(url=str(user.avatar_url)))
 
     @commands.command()
     async def vote(self, ctx):
         """Returns voting links"""
-        embed = discord.Embed(title = "__Voting Links__",
-                              description = "[Top.GG](https://top.gg/bot/753037464599527485) \n[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)")
+        embed = discord.Embed(title="__Voting Links__",
+                              description="[Top.GG](https://top.gg/bot/753037464599527485) \n[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)")
 
-        await ctx.send(embed = embed)
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))
