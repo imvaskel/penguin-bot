@@ -51,15 +51,19 @@ class ErrorHandler(Cog, name="Errors"):
             ).theme['_ansi_enabled'] = False
             traceback = ''.join(prettify_exceptions.DefaultFormatter(
             ).format_exception(type(error), error, error.__traceback__))
+
+            url = str(await self.bot.mystbin.post(traceback)) if len(traceback) > 512 else None
+
             embed = ErrorEmbed(
-                description=f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{traceback}```",
+                description=f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{url or traceback}```",
             )
             embed.set_footer(text=f"Caused by: {ctx.command}")
             await ctx.reply(embed=embed)
 
+
             # Support server embed
             embed = ErrorEmbed(
-                description=f"```{traceback}```",
+                description= f"```{url or traceback}```",
             )
             embed.add_field(
                 name="Details:",
