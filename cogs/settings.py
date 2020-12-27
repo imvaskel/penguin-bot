@@ -3,8 +3,8 @@ from discord.ext import commands
 from listeners.errors import ErrorEmbed
 
 
-class ConfigCog(commands.Cog, name="config"):
-    """Cog that deals with config of the bot, you must have the `manage guild` permission to use this."""
+class SettingsCog(commands.Cog, name="Settings"):
+    """Cog that deals with settings of the bot, you must have the `manage guild` permission to use this."""
 
     def __init__(self, bot):
         self.bot = bot
