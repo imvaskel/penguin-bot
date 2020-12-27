@@ -207,4 +207,4 @@ class SettingsCog(commands.Cog, name="Settings"):
 
 
 def setup(bot):
-    bot.add_cog(ConfigCog(bot))
+    bot.add_cog(SettingsCog(bot))
