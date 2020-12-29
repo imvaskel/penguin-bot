@@ -3,7 +3,6 @@ from discord.ext import commands
 import os
 import configparser
 import mystbin
-from aiogoogletrans import Translator
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
 
