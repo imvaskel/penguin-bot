@@ -11,7 +11,8 @@ class ErrorEmbed(discord.Embed):
         super().__init__(color=discord.Color.red(),
                          title="An error occurred!",
                          description=description,
-                         timestamp=datetime.utcnow())
+                         timestamp=datetime.utcnow(),
+                         url = "https://penguin.vaskel.xyz/support")
 
 
 class ErrorHandler(Cog, name="Errors"):
@@ -60,14 +61,14 @@ class ErrorHandler(Cog, name="Errors"):
             url = str(await self.bot.mystbin.post(traceback)) if len(traceback) > 512 else None
 
             embed = ErrorEmbed(
-                description=f"Reported to the support server. Need more help? [Join the support server](https://penguin.vaskel.xyz/support)\n```Error: \n{url or traceback}```",
+                description=url or f"```{traceback}```",
             )
-            embed.set_footer(text=f"Caused by: {ctx.command}")
+            embed.set_footer(text=f"Caused by: {ctx.command} Click the title of the embed to join the support server!")
             await ctx.reply(embed=embed)
 
             # Support server embed
             embed = ErrorEmbed(
-                description=f"```{url or traceback}```",
+                description= url or f"```{traceback}```",
             )
             embed.add_field(
                 name="Details:",
