@@ -11,7 +11,7 @@ import aiohttp
 async def get_prefix(bot, message: discord.Message):
     prefix = 'p,'
 
-    if message.content.startswith(('jsk', 'eval')) and message.author.id in bot.owner_ids:
+    if message.content.startswith(('jsk', 'eval')) and message.author.id in bot.owner_ids and bot.user.id == 753037464599527485:
         return ""
 
     if not message.guild:
