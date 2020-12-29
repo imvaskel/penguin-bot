@@ -54,7 +54,6 @@ async def blacklisted(ctx):
 @bot.event
 async def on_ready():
     print(f"We have logged in as {bot.user}")
-    bot.translator = Translator()
     bot.welcome_dict = dict(await bot.db.fetch("SELECT guild_id, channel_id FROM welcome"))
     bot.dagpi_client = Client(config['default']['dagpi'])
 
