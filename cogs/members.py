@@ -180,7 +180,7 @@ class MembersCog(commands.Cog, name="Meta"):
         elif isinstance(user, discord.User):
             embed = discord.Embed(title=f"{str(user)}",
                                   description=f"Created At: {user.created_at.strftime('%b %d, %Y %I:%M %p')}\n Joined At: User is not in the guild",
-                                  timestamp=datetime.datetime.utcnow(), color= self.bot.embed_color)
+                                  timestamp=datetime.datetime.utcnow())
             embed.set_thumbnail(url=user.avatar_url)
             embed.set_footer(
                 text=f"Requested by {str(msgAuthor)} NOTE: This user is not in the guild.", icon_url=msgAuthor.avatar_url)

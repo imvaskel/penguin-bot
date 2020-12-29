@@ -8,7 +8,7 @@ from utils.CustomBot import PenguinBot
 
 startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
-                      'cogs.configcog',
+                      'cogs.settings',
                       'listeners.errors', 'listeners.guilds', 'listeners.moderation',
                       'listeners.reactionroles', 'listeners.welcomer']
 
