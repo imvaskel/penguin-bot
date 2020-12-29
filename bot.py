@@ -54,9 +54,13 @@ async def blacklisted(ctx):
 
 @bot.event
 async def on_ready():
-    print(f"We have logged in as {bot.user}")
-    bot.welcome_dict = dict(await bot.db.fetch("SELECT guild_id, channel_id FROM welcome"))
-    bot.dagpi_client = Client(config['default']['dagpi'])
+    print(
+        "Logged in! \n"
+        f"{'-' * 20}\n"
+        f"Bot Name: {bot.user} \n"
+        f"Bot ID: {bot.user.id} \n"
+        f"{'-' * 20}"
+    )
 
 bot.mystbin = mystbin.Client()
 

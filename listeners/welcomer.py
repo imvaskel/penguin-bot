@@ -25,8 +25,8 @@ class WelcomerListener(commands.Cog):
     def __init__(self, bot: PenguinBot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
+    @commands.Cog.listener('on_member_join')
+    async def welcomer(self, member):
         e = self.bot.cache[member.guild.id]
         try:
             if e["welcomeEnabled"]:
