@@ -7,9 +7,6 @@ import discord
 import asyncio
 import re
 from discord.ext import commands
-import sys
-import traceback
-import aiosqlite
 
 
 time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")

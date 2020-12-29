@@ -7,7 +7,6 @@ import io
 import configparser
 import time
 from collections import deque
-from aiogoogletrans import Translator, LANGUAGES
 from discord.ext.commands.cooldowns import BucketType
 from asyncdagpi import Client, ImageFeatures
 from discord.ext.commands.core import command
