@@ -19,7 +19,6 @@ class FunCog(commands.Cog, name="Fun"):
     def __init__(self, bot):
         self.bot = bot
         self.task = self.bot.loop.create_task(self.initialize())
-        self.translator = Translator()
 
     async def initialize(self):
         self.session = aiohttp.ClientSession()
