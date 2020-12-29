@@ -13,8 +13,9 @@ class ListenerCog(commands.Cog, name="Listener"):
 
             await cmd(ctx)
 
-    @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
+    # Credit to https://github.com/platform-discord/travis-bott, license things, lol
+    @commands.Cog.listener('on_message_edit')
+    async def reinvoke_on_edit(self, before, after):
         if before.content != after.content:
             ctx = await self.bot.get_context(after)
             await self.bot.invoke(ctx)
