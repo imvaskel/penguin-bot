@@ -214,7 +214,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         guildCache = self.bot.cache[ctx.guild.id]
         embed = discord.Embed(title = "Configs",
                               description= (
-                                  f"Prefix : `{guildCache['prefix']}`"
+                                  f"Prefix : `{guildCache['prefix']}`\n"
                                   f"{self.off_on[bool(guildCache['autorole'])]} Autorole\n"
                                   f"{self.off_on[bool(guildCache['welcomeId'])]} Welcome\n"
                                   f"{self.off_on[bool(guildCache['logId'])]} Logging"
