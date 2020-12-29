@@ -63,7 +63,7 @@ class ErrorHandler(Cog, name="Errors"):
             embed = ErrorEmbed(
                 description=url or f"```{traceback}```",
             )
-            embed.set_footer(text=f"Caused by: {ctx.command} Click the title of the embed to join the support server!")
+            embed.set_footer(text=f"Caused by: {ctx.command} • Click the title of the embed to join the support server!")
             await ctx.reply(embed=embed)
 
             # Support server embed
@@ -73,8 +73,8 @@ class ErrorHandler(Cog, name="Errors"):
             embed.add_field(
                 name="Details:",
                 value=(
-                    f"Caused by: `{str(ctx.author)} [{ctx.author.id}]`"
-                    f"In guild: `{str(ctx.guild)} [{ctx.guild.id}]`"
+                    f"Caused by: `{str(ctx.author)} [{ctx.author.id}]`\n"
+                    f"In guild: `{str(ctx.guild)} [{ctx.guild.id}]`\n"
                     f"Command: `{ctx.command}`"
                 )
             )
