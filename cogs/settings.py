@@ -8,6 +8,8 @@ class SettingsCog(commands.Cog, name="Settings"):
 
     def __init__(self, bot):
         self.bot = bot
+        self.off_on = ["<:set_no_on:776868727257825330><:set_yes_off:776868727257825290>", # off
+                       "<:set_no_off:776868727253237780><:set_yes_on:776868727089659905>"] # on
 
     async def cog_check(self, ctx):
         return ctx.author.guild_permissions.manage_guild
@@ -204,6 +206,20 @@ class SettingsCog(commands.Cog, name="Settings"):
         s = await self.bot.db.fetchrow("SELECT autorole FROM guild_config WHERE id = $1", ctx.guild.id)
         role = ctx.guild.get_role(s["autorole"])
         await ctx.send(embed=discord.Embed(description=f"{str(ctx.guild)}'s autorole is {role}"))
+
+    @commands.command()
+    @commands.guild_only()
+    async def configs(self, ctx):
+        """Returns the state of the guilds configs"""
+        guildCache = self.bot.cache[ctx.guild.id]
+        embed = discord.Embed(title = "Configs",
+                              description= (
+                                  f"Prefix : `{guildCache['prefix']}`"
+                                  f"{self.off_on[bool(guildCache['autorole'])]} Autorole\n"
+                                  f"{self.off_on[bool(guildCache['welcomeId'])]} Welcome\n"
+                                  f"{self.off_on[bool(guildCache['logId'])]} Logging"
+                              ))
+        await ctx.send(embed = embed)
 
 
 def setup(bot):
