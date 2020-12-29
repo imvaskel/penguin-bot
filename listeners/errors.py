@@ -12,7 +12,7 @@ class ErrorEmbed(discord.Embed):
                          title="An error occurred!",
                          description=description,
                          timestamp=datetime.utcnow(),
-                         url = "https://penguin.vaskel.xyz/support")
+                         url="https://penguin.vaskel.xyz/support")
 
 
 class ErrorHandler(Cog, name="Errors"):
@@ -63,12 +63,13 @@ class ErrorHandler(Cog, name="Errors"):
             embed = ErrorEmbed(
                 description=url or f"```{traceback}```",
             )
-            embed.set_footer(text=f"Caused by: {ctx.command} • Click the title of the embed to join the support server!")
+            embed.set_footer(
+                text=f"Caused by: {ctx.command} • Click the title of the embed to join the support server!")
             await ctx.reply(embed=embed)
 
             # Support server embed
             embed = ErrorEmbed(
-                description= url or f"```{traceback}```",
+                description=url or f"```{traceback}```",
             )
             embed.add_field(
                 name="Details:",

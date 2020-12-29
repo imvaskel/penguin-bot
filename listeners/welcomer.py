@@ -58,5 +58,6 @@ class WelcomerListener(commands.Cog):
 
     # TODO Add leaver too, more cache tho
 
+
 def setup(bot):
     bot.add_cog(WelcomerListener(bot))

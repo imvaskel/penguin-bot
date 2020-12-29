@@ -18,6 +18,7 @@ os.environ["JISHAKU_HIDE"] = "True"
 intents = discord.Intents.default()
 intents.members = True
 
+
 async def get_prefix(bot, message):
     prefix = 'p,'
 
