@@ -1,9 +1,8 @@
 import discord
-import configparser
 import asyncpg
 import asyncio
 import toml
-from discord.ext import commands
+from discord.ext import commands, ipc
 import datetime as dt
 import aiohttp
 
@@ -35,6 +34,8 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.config = toml.load('config.toml')
 
+        self.ipc = ipc.Server(self, "localhost", 8765, self.config['default']['ipc_key'])
+
         self.db = self.loop.run_until_complete(
             asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'],
                             database=self.config['default']['db_name'], host='127.0.0.1'))
@@ -59,11 +60,11 @@ class PenguinBot(commands.AutoShardedBot):
             self.db.fetch("SELECT id, prefix FROM guild_config")))
 
         for record in records:
-            d = {
-                record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
-                               "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
-                               "welcomeId": record["welcomeid"], "logId": record['log_id']}}
+            d = self.refresh_template(record)
             self.cache.update(d)
+
+    async def on_ipc_ready(self):
+        print("ipc ready")
 
     def refresh_template(self, record: asyncpg.Record):
         d = {
@@ -76,11 +77,7 @@ class PenguinBot(commands.AutoShardedBot):
     async def refresh_cache(self):
         records = await self.db.fetch("SELECT * FROM guild_config")
         for record in records:
-            d = {
-                record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
-                               "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
-                               "welcomeId": record["welcomeid"], "logId": record['log_id']}
-            }
+            d = self.refresh_template(record)
             self.cache.update(d)
 
     async def cache_reactionroles(self):

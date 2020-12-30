@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, ipc
 import os
 import configparser
 import mystbin
@@ -10,7 +10,8 @@ startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun'
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
                       'cogs.settings',
                       'listeners.errors', 'listeners.guilds', 'listeners.moderation',
-                      'listeners.reactionroles', 'listeners.welcomer']
+                      'listeners.reactionroles', 'listeners.welcomer',
+                      'utils.IpcCog']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
