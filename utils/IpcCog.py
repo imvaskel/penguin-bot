@@ -4,10 +4,10 @@ from utils.CustomBot import PenguinBot
 
 
 class IpcCog(commands.Cog):
-    def __init__(self, bot: PenguinBot):
+    def __init__(self, bot):
         self.bot = bot
 
-    @ipc.server.route()
+    @ipc.Server.route()
     async def refresh_cache_for_guild(self, data):
         try:
             await self.bot.refresh_cache_for(data.guildId)
