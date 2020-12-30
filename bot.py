@@ -75,12 +75,14 @@ async def on_error(event, *args, **kwargs):
         raise
 
 if __name__ == "__main__":
+    bot.ipc.start()
     for extension in startup_extensions:
         try:
             bot.load_extension(extension)
         except Exception as e:
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
+
 
 botSecret = config['default']['BOT_SECRET']
 bot.nasa_api = config['default']['NASA_API']

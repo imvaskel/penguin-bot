@@ -35,6 +35,7 @@ class PenguinBot(commands.AutoShardedBot):
         self.config = toml.load('config.toml')
 
         self.ipc = ipc.Server(self, "localhost", 8765, self.config['default']['ipc_key'])
+        self.load_extension("utils.ipc")
 
         self.db = self.loop.run_until_complete(
             asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'],
