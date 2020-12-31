@@ -1,16 +1,17 @@
 import discord
 from discord.ext import commands, ipc
+from utils.CustomBot import PenguinBot
 
 
 class IpcRoutes(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: PenguinBot):
         self.bot = bot
 
     @ipc.server.route()
     async def get_member_count(self, data):
-        guild = self.bot.get_guild(data.guild_id)  # get the guild object using parsed guild_id
+        guild = int(data.guild_id)  # get the guild object using parsed guild_id
 
-        return guild.member_count  # return the member count to the client
+        await self.bot.refresh_cache_for(guild)
 
 
 def setup(bot):

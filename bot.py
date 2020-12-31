@@ -10,8 +10,7 @@ startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun'
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
                       'cogs.settings',
                       'listeners.errors', 'listeners.guilds', 'listeners.moderation',
-                      'listeners.reactionroles', 'listeners.welcomer',
-                      'utils.IpcCog']
+                      'listeners.reactionroles', 'listeners.welcomer']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
@@ -75,6 +74,7 @@ async def on_error(event, *args, **kwargs):
         raise
 
 if __name__ == "__main__":
+    botSecret = config['default']['BOT_SECRET']
     bot.ipc.start()
     for extension in startup_extensions:
         try:
@@ -82,8 +82,7 @@ if __name__ == "__main__":
         except Exception as e:
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
+    bot.run(botSecret, bot=True)
 
-
-botSecret = config['default']['BOT_SECRET']
 bot.nasa_api = config['default']['NASA_API']
-bot.run(botSecret, bot=True)
+
