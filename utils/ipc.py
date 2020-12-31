@@ -11,7 +11,11 @@ class IpcRoutes(commands.Cog):
     async def refresh_cache_for_guild(self, data):
         guild = int(data.guild_id)  # get the guild object using parsed guild_id
 
-        await self.bot.refresh_cache_for(guild)
+        try:
+            await self.bot.refresh_cache_for(guild)
+            return "done"
+        except:
+            return "error"
 
 
 def setup(bot):
