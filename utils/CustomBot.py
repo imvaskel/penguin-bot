@@ -99,3 +99,7 @@ class PenguinBot(commands.AutoShardedBot):
     async def refresh_cache_for(self, guildId):
         record = await self.db.fetchrow("SELECT * FROM guild_config WHERE id = $1", guildId)
         self.cache.update(self.refresh_template(record))
+
+    def get_announcement(self):
+        with open('announcement.txt', 'r') as file:
+            self.announcement = file.read()

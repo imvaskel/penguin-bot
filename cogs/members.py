@@ -425,6 +425,11 @@ Mention: {role.mention}""",
 
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def announcement(self, ctx):
+        await ctx.send(embed = discord.Embed(title = "Announcement",
+                                             description=self.bot.announcement))
+
 
 def setup(bot):
     bot.add_cog(MembersCog(bot))

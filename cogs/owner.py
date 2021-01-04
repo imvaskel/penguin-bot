@@ -22,7 +22,7 @@ class SqlPages(SimplePages):
         super().__init__(converted, per_page=per_page)
 
 
-class OwnerCog(commands.Cog, name="Owner"):
+class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
     """Owner Commands"""
 
     def __init__(self, bot):
@@ -283,6 +283,20 @@ class OwnerCog(commands.Cog, name="Owner"):
             await self.bot.refresh_blacklist()
         except Exception as e:
             await ctx.reply(f"An error occured \n{e}")
+
+    @commands.command()
+    @commands.is_owner()
+    async def set_announcement(self, ctx, *, announcement):
+        try:
+            with open('announcement.txt', 'w+') as file:
+                file.truncate(0)
+                file.write(announcement)
+        except Exception as e:
+            return await ctx.reply("An error occurred ``` \n" + str(e) + "```")
+
+        self.bot.announcement = announcement
+        await ctx.reply("Successfully set the announcement")
+
 
 
 def setup(bot):
