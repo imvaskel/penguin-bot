@@ -64,6 +64,8 @@ class PenguinBot(commands.AutoShardedBot):
             d = self.refresh_template(record)
             self.cache.update(d)
 
+        self.get_announcement()
+
     async def on_ipc_ready(self):
         print("ipc ready")
 
