@@ -17,9 +17,9 @@ async def get_prefix(bot, message: discord.Message):
         return commands.when_mentioned_or(*prefix)(bot, message)
 
     else:
-        if bot.cache[message.guild.id]['id']:
+        if bot.cache[message.guild.id]['prefix']:
             return commands.when_mentioned_or(bot.cache[message.guild.id]['id'])(bot, message)
-        elif not bot.cache[message.guild.id]['id']:
+        elif not bot.cache[message.guild.id]['prefix']:
             return commands.when_mentioned_or(*prefix)(bot, message)
 
 
