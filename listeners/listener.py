@@ -7,7 +7,7 @@ class ListenerCog(commands.Cog, name="Listener"):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content in ("<@!753037464599527485>", "<@753037464599527485>"):
+        if message.content in (f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"):
             ctx = await self.bot.get_context(message)
             cmd = self.bot.get_command("prefixes")
 
