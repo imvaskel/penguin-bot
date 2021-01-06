@@ -32,7 +32,7 @@ class IpcRoutes(commands.Cog):
     @ipc.server.route()
     async def get_help_commands(self):
         l = [template(command) for command in self.bot.commands]
-        return l
+        return {"data": l}
 
 
 
