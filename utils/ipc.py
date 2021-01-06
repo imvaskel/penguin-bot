@@ -31,8 +31,11 @@ class IpcRoutes(commands.Cog):
 
     @ipc.server.route()
     async def get_help_commands(self):
-        l = [template(command) for command in self.bot.commands]
-        return {"data": l}
+        try:
+            l = [template(command) for command in self.bot.commands]
+            return {"data": l}
+        except Exception as e:
+            return f"An error occured: \n" + str(e)
 
 
 
