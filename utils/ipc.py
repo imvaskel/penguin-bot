@@ -27,12 +27,12 @@ class IpcRoutes(commands.Cog):
             return "error"
 
     @ipc.server.route()
-    async def get_guild_ids(self,data):
+    async def get_guild_ids(self, data):
         return [i.id for i in self.bot.guilds]
 
     @ipc.server.route()
     async def get_help_commands(self, data):
-        l = [template(command) for command in self.bot.commands]
+        l = [template(command) for command in self.bot.commands if not command.hidden]
         return {"data": l}
 
 def setup(bot):
