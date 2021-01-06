@@ -19,6 +19,23 @@ class IpcRoutes(commands.Cog):
             print(e)
             return "error"
 
+    @ipc.server.route()
+    async def get_guild_ids(self):
+        return [i.id for i in self.bot.guilds]
+
+    @ipc.server.route()
+    async def get_help_commands(self):
+        l = []
+        def template(name, help, arguments, aliases):
+            return {"command": name, "help": help, "arguments": arguments, "aliases": aliases}
+
+        for command in self.bot.commands:
+            if command.cog_name == "Owner":
+                continue
+            l.append(template(command.name, command.help or 'None', command.signature if command.signature != "," else 'None', command.aliases or 'None'))
+            l
+
+
 
 def setup(bot):
     bot.add_cog(IpcRoutes(bot))
