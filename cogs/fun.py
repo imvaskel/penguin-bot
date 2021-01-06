@@ -19,6 +19,7 @@ class FunCog(commands.Cog, name="Fun"):
     def __init__(self, bot):
         self.bot = bot
         self.task = self.bot.loop.create_task(self.initialize())
+        self.nasa_api = bot.config['default']['NASA_API']
 
     async def initialize(self):
         self.session = aiohttp.ClientSession()
@@ -31,9 +32,9 @@ class FunCog(commands.Cog, name="Fun"):
         help="Astronomy Picture of the Day, returns the NASA astronomy picture of the day from their API, found at https://api.nasa.gov/. Use `YYYY-MM-DD` for a specific date. If the length of the explaniation is over 1024 chars, it does not add a caption.")
     async def apod(self, ctx, date=None):
         if date == None:
-            url = f"https://api.nasa.gov/planetary/apod?api_key={self.bot.nasa_api}"
+            url = f"https://api.nasa.gov/planetary/apod?api_key={self.nasa_api}"
         elif date != "":
-            url = f"https://api.nasa.gov/planetary/apod?date={date}&api_key={self.bot.nasa_api}"
+            url = f"https://api.nasa.gov/planetary/apod?date={date}&api_key={self.nasa_api}"
 
         async with self.session.get(url) as r:
             res = await r.json()
