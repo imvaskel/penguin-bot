@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, ipc
 from utils.CustomBot import PenguinBot
 import json
+import traceback
 
 def template(command: commands.Command):
             return {"command": command.name,
@@ -26,19 +27,13 @@ class IpcRoutes(commands.Cog):
             return "error"
 
     @ipc.server.route()
-    async def get_guild_ids(self):
+    async def get_guild_ids(self,data):
         return [i.id for i in self.bot.guilds]
 
     @ipc.server.route()
-    async def get_help_commands(self):
-        try:
-            l = [template(command) for command in self.bot.commands]
-            return {"data": l}
-        except Exception as e:
-            return f"An error occured: \n" + str(e)
-
-
-
+    async def get_help_commands(self, data):
+        l = [template(command) for command in self.bot.commands]
+        return {"data": l}
 
 def setup(bot):
     bot.add_cog(IpcRoutes(bot))
