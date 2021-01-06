@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands, ipc
 from utils.CustomBot import PenguinBot
+import json
 
 def template(name, help, arguments, aliases):
             return {"command": name, "help": help, "arguments": arguments, "aliases": aliases}
@@ -33,6 +34,7 @@ class IpcRoutes(commands.Cog):
             if command.cog_name == "Owner":
                 continue
             l.append(template(command.name, command.help or 'None', command.signature if command.signature != "," else 'None', command.aliases or 'None'))
+        l = json.dumps(l)
         return l
 
 
