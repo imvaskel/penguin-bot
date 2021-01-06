@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands, ipc
 from utils.CustomBot import PenguinBot
 
+def template(name, help, arguments, aliases):
+            return {"command": name, "help": help, "arguments": arguments, "aliases": aliases}
 
 class IpcRoutes(commands.Cog):
     def __init__(self, bot: PenguinBot):
@@ -26,8 +28,6 @@ class IpcRoutes(commands.Cog):
     @ipc.server.route()
     async def get_help_commands(self):
         l = []
-        def template(name, help, arguments, aliases):
-            return {"command": name, "help": help, "arguments": arguments, "aliases": aliases}
 
         for command in self.bot.commands:
             if command.cog_name == "Owner":
