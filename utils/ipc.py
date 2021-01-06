@@ -34,7 +34,7 @@ class IpcRoutes(commands.Cog):
             if command.cog_name == "Owner":
                 continue
             l.append(template(command.name, command.help or 'None', command.signature if command.signature != "," else 'None', command.aliases or 'None'))
-        l = json.dumps(l)
+        l = str(l)
         return l
 
 
