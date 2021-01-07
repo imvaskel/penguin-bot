@@ -34,7 +34,7 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.config = toml.load('config.toml')
 
-        self.ipc = ipc.Server(self, "localhost", 8765, self.config['default']['ipc_key'])
+        self.ipc = ipc.Server(self, "localhost", self.config['default']['ipc_port'], self.config['default']['ipc_key'])
         self.load_extension("utils.ipc")
 
         self.db = self.loop.run_until_complete(
