@@ -1,6 +1,8 @@
 import discord
 import datetime
 from discord.ext import commands
+from contextlib import suppress
+import asyncpg
 
 
 class GuildsListener(commands.Cog):
@@ -22,7 +24,8 @@ class GuildsListener(commands.Cog):
     @commands.Cog.listener('on_guild_remove')
     async def on_guild_leave(self, guild):
 
-        await self.bot.db.execute("DELETE FROM guild_config WHERE id = $1 ON CONFLICT DO NOTHING", guild.id)
+        with suppress(Exception):
+            await self.bot.db.execute("DELETE FROM guild_config WHERE id = $1", guild.id)
 
         c = self.bot.get_channel(781615213421658142)
 
