@@ -32,7 +32,7 @@ class FunCog(commands.Cog, name="Fun"):
         self.task.cancel()
         self.session.close()
 
-    def _get_and_zip_all_emojis(self, guild: discord.Guild):
+    async def _get_and_zip_all_emojis(self, guild: discord.Guild):
         buffer = BytesIO()
         with zipfile.ZipFile(buffer, "w") as zip_file:
             for e in guild.emojis:
