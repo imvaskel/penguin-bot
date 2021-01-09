@@ -207,7 +207,7 @@ class FunCog(commands.Cog, name="Fun"):
         emojis = await self._get_and_zip_all_emojis(ctx.guild)
         end = time.perf_counter()
 
-        await ctx.send(f"Completed in `{end-start:.2f}`s", file=discord.File(emojis, filename="emojis.zip"))
+        await ctx.send(f"Completed in `{end-start:.2f}`s", file=discord.File(emojis, filename=f"{ctx.guild}-emojis.zip"))
 
 
 
