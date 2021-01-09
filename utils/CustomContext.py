@@ -4,5 +4,5 @@ from discord.ext import commands
 class PenguinContext(commands.Context):
 
     @property
-    def test(self):
+    async def test(self):
         return "hi"
