@@ -10,3 +10,6 @@ class PenguinContext(commands.Context):
         embed.set_footer(icon_url=str(self.author.avatar_url), text=f"Requested by {self.author}")
         await self.send(embed = embed)
 
+    async def refresh_cache(self):
+        """Refreshes the cache for the guild in the ctx object"""
+        self.bot.cache.update(self.bot.refresh_template(await self.bot.db.fetchrow("SELECT * FROM guild_config WHERE id = $1", self.guild.id)))
