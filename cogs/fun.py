@@ -1,3 +1,5 @@
+import functools
+
 import discord
 from discord.ext import commands
 import aiohttp
@@ -10,6 +12,8 @@ from collections import deque
 from discord.ext.commands.cooldowns import BucketType
 from asyncdagpi import Client, ImageFeatures
 from discord.ext.commands.core import command
+import zipfile
+from io import BytesIO
 from jishaku import codeblocks
 
 
@@ -27,6 +31,16 @@ class FunCog(commands.Cog, name="Fun"):
     def cog_unload(self):
         self.task.cancel()
         self.session.close()
+
+    def _get_and_zip_all_emojis(self, guild: discord.Guild):
+        buffer = BytesIO()
+        with zipfile.ZipFile(buffer, "w") as zip_file:
+            for e in guild.emojis:
+                e_bytes = await (e.url_as()).read()
+                zip_file.writestr(f"{e.name}.{'gif' if e.animated else 'png'}", e_bytes)
+        buffer.seek(0)
+        return buffer
+
 
     @commands.command(
         help="Astronomy Picture of the Day, returns the NASA astronomy picture of the day from their API, found at https://api.nasa.gov/. Use `YYYY-MM-DD` for a specific date. If the length of the explaniation is over 1024 chars, it does not add a caption.")
@@ -185,6 +199,19 @@ class FunCog(commands.Cog, name="Fun"):
             paste = codeblocks.codeblock_converter(paste)
             url = await self.bot.mystbin.post(paste[1], syntax=paste[0])
             return await ctx.send(str(url))
+
+    @commands.command(aliases = ['zae'])
+    @commands.cooldown(1, 60, BucketType.user)
+    async def zip_all_emojis(self, ctx):
+        start = time.perf_counter()
+        thing = functools.partial(self._get_and_zip_all_emojis(ctx.guild))
+
+        emojis = await self.bot.loop.run_in_executor(None, thing)
+        end = time.perf_counter()
+
+        await ctx.send(f"Completed in `{end-start:.2f}`s", file=discord.File(emojis, filename="emojis.zip"))
+
+
 
 
 def setup(bot):
