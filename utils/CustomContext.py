@@ -6,7 +6,7 @@ class PenguinContext(commands.Context):
 
     async def embed(self, *args, **kwargs):
         """Sends an embed with the args given"""
-        embed = discord.Embed(**kwargs, timestamp=kwargs.get("timestamp") or datetime.utcnow())
-        embed.set_footer(text=f"Requested by {self.author}")
+        embed = discord.Embed(**kwargs, timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=str(self.author.avatar_url), text=f"Requested by {self.author}")
         await self.send(embed = embed)
 
