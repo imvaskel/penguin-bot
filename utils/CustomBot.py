@@ -5,6 +5,7 @@ import toml
 from discord.ext import commands, ipc
 import datetime as dt
 import aiohttp
+from utils.CustomContext import PenguinContext
 
 
 async def get_prefix(bot, message: discord.Message):
@@ -24,6 +25,9 @@ async def get_prefix(bot, message: discord.Message):
 
 
 class PenguinBot(commands.AutoShardedBot):
+    async def get_context(self, message, *, cls=None):
+        return await super().get_context(message, cls=cls or PenguinContext)
+
     def __init__(self, *args, **kwargs):
         super().__init__(get_prefix, *args, **kwargs)
 
