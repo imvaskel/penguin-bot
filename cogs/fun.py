@@ -201,7 +201,7 @@ class FunCog(commands.Cog, name="Fun"):
             return await ctx.send(str(url))
 
     @commands.command(aliases = ['zae'])
-    @commands.cooldown(1, 60, BucketType.user)
+    @commands.cooldown(1, 300, BucketType.guild)
     async def zip_all_emojis(self, ctx):
         start = time.perf_counter()
         emojis = await self._get_and_zip_all_emojis(ctx.guild)
