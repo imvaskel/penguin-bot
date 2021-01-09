@@ -204,9 +204,7 @@ class FunCog(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, BucketType.user)
     async def zip_all_emojis(self, ctx):
         start = time.perf_counter()
-        thing = functools.partial(self._get_and_zip_all_emojis(ctx.guild))
-
-        emojis = await self.bot.loop.run_in_executor(None, thing)
+        emojis = await self._get_and_zip_all_emojis(ctx.guild)
         end = time.perf_counter()
 
         await ctx.send(f"Completed in `{end-start:.2f}`s", file=discord.File(emojis, filename="emojis.zip"))
