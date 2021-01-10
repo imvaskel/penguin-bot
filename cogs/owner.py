@@ -118,7 +118,7 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
             title="*Killing Bot* \U0001f52a", description="Goodbye!", color=0xff0000)
         await ctx.send(embed=embedvar)
         print("Bot Shut Down")
-        output = sp.getoutput("systemctl --user stop botService")
+        output = sp.getoutput("systemctl --user stop penguin")
         await ctx.send(output)
 
     @commands.is_owner()
@@ -262,7 +262,7 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def journalctl(self, ctx):
-        await ctx.invoke(self.bot.get_command('jsk sh'), argument=codeblocks.codeblock_converter("journalctl -u botService"))
+        await ctx.invoke(self.bot.get_command('jsk sh'), argument=codeblocks.codeblock_converter("journalctl -u penguin"))
 
     @commands.command(hidden=True)
     @commands.is_owner()
