@@ -317,16 +317,8 @@ class MembersCog(commands.Cog, name="Meta"):
 
     @commands.command()
     async def privacy(self, ctx):
-        embed = discord.Embed()
-        embed.add_field(name="What data do we store?",
-                        value="We store guild ids, for management of prefixes and guild-specific things. We also store user IDS for the economy module, this is opt-in and you can also deregister you bank account with the current guild, use `help Economy` for more help. This may change in the future and thusly, you should pay attention to the command.")
-        embed.add_field(name="What data can other users access?",
-                        value="Other users can access your userinfo (like id, profile-picture, join date, and creation date of your account) via `whois`, this information is public to any bot, and thusly there is no opt-out")
-        embed.add_field(name="Can I get my data removed?",
-                        value="Absolutely. If you wish to have your data wiped, join the [support server](https://penguin.vaskel.xyz/invite) and make the bot leave your guild with `leave`, we will wipe your guild from the database. Due to the fact that the bot relies on guild id storage, we cannot allow you to continue using the bot with no guild info.")
-        embed.add_field(name="Any more questions?",
-                        value="Join the [support server](https://penguin.vaskel.xyz/invite).")
-        await ctx.send(embed=embed)
+        """Returns a link to the bots privacy policy."""
+        await ctx.embed(title="Privacy Link", url="https://penguin.vaskel.xyz/privacy")
 
     @commands.command()
     async def stats(self, ctx):
@@ -429,6 +421,16 @@ Mention: {role.mention}""",
     async def announcement(self, ctx):
         await ctx.send(embed = discord.Embed(title = "Announcement",
                                              description=self.bot.announcement))
+
+    @commands.command()
+    async def dashboard(self, ctx):
+        """Returns a link to the dashboard"""
+        await ctx.embed(title="Dashboard", url="https://penguin.vaskel.xyz/config/")
+
+    @commands.command()
+    async def website(self, ctx):
+        """Returns the website link"""
+        await ctx.embed(title="Website", url="https://penguin.vaskel.xyz/")
 
 
 def setup(bot):
