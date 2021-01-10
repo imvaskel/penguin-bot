@@ -217,7 +217,7 @@ class SettingsCog(commands.Cog, name="Settings"):
                               description=(
                                   f"Prefix : `{guildCache['prefix']}`\n"
                                   f"{self.off_on[bool(guildCache['autorole'])]} Autorole\n"
-                                  f"{template.format(ctx.guild.get_role(guildCache['autorole']).mention) if bool(guildCache['autorole']) else ""}"
+                                  f"{template.format(ctx.guild.get_role(guildCache['autorole']).mention) if bool(guildCache['autorole']) else ''}"
                                   f"{self.off_on[bool(guildCache['welcomeId'])]} Welcome\n"
                                   f"{self.off_on[bool(guildCache['logId'])]} Logging"
                               ))
