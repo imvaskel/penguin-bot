@@ -34,14 +34,6 @@ bot = PenguinBot(description='',
                  activity=activity,
                  owner_ids={447422100798570496})
 
-
-@bot.check
-async def blacklisted(ctx):
-    if ctx.author.id in bot.blacklistedUsers:
-        raise Blacklisted("You are blacklisted!")
-    return True
-
-
 @bot.event
 async def on_ready():
     print(
