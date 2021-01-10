@@ -60,8 +60,7 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
         # Remember to use dot path. e.g: owner
 
         try:
-            self.bot.unload_extension(cog)
-            self.bot.load_extension(cog)
+            self.bot.reload_extension(cog)
             await ctx.send(f"Reloaded cog {cog}")
         except Exception as e:
             await ctx.send(f'**`ERROR:`** {type(e).__name__} - {e}')
