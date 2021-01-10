@@ -207,7 +207,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         role = ctx.guild.get_role(s["autorole"])
         await ctx.send(embed=discord.Embed(description=f"{str(ctx.guild)}'s autorole is {role}"))
 
-    @commands.command()
+    @commands.command(aliases=['settings'])
     @commands.guild_only()
     async def configs(self, ctx):
         """Returns the state of the guilds configs"""
