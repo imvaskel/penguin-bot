@@ -211,11 +211,13 @@ class SettingsCog(commands.Cog, name="Settings"):
     @commands.guild_only()
     async def configs(self, ctx):
         """Returns the state of the guilds configs"""
+        template = "ட {}\n"
         guildCache = self.bot.cache[ctx.guild.id]
         embed = discord.Embed(title="Configs",
                               description=(
                                   f"Prefix : `{guildCache['prefix']}`\n"
                                   f"{self.off_on[bool(guildCache['autorole'])]} Autorole\n"
+                                  f"{template.format(ctx.guild.get_role(guildCache['autorole']).mention if bool(guildCache['autorole']) else ""}"
                                   f"{self.off_on[bool(guildCache['welcomeId'])]} Welcome\n"
                                   f"{self.off_on[bool(guildCache['logId'])]} Logging"
                               ))
