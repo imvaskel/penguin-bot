@@ -10,6 +10,7 @@ class CheckCog(commands.Cog):
         bot.add_check(self.isBlacklisted)
 
     async def cog_command_error(self, ctx, error):
+        error = getattr(error, 'original', error)
         if isinstance(error, Blacklisted):
             await ctx.reply(embed=ErrorEmbed(description=str(error)))
 
