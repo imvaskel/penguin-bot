@@ -100,6 +100,14 @@ class AnimalsCog(commands.Cog, name="Animal"):
                 url=res['url']
             ))
 
+    @commands.command(aliases=['http-cat', 'httpcat'])
+    async def http(self, ctx, http_code: int):
+        """Returns an image of a cat from https://http.cat"""
+        async with self.bot.session.get(f'https://http.cat/{http_code}') as res:
+            r = io.BytesIO(await res.read())
+
+            await ctx.send(file=discord.File(r, f"{int}.png"))
+
 
 def setup(bot):
     bot.add_cog(AnimalsCog(bot))
