@@ -5,6 +5,7 @@ import configparser
 import mystbin
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
+from utils.CustomErrors import *
 
 startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
@@ -17,19 +18,6 @@ os.environ["JISHAKU_HIDE"] = "True"
 
 intents = discord.Intents.default()
 intents.members = True
-
-
-async def get_prefix(bot, message):
-    prefix = 'p,'
-
-    if not message.guild:
-        return commands.when_mentioned_or(*prefix)(bot, message)
-
-    else:
-        if message.guild.id in bot.prefixes:
-            return commands.when_mentioned_or(bot.prefixes[message.guild.id])(bot, message)
-        elif not message.guild.id in bot.prefixes:
-            return commands.when_mentioned_or(*prefix)(bot, message)
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -49,7 +37,9 @@ bot = PenguinBot(description='',
 
 @bot.check
 async def blacklisted(ctx):
-    return ctx.author.id not in bot.blacklistedUsers
+    if ctx.author.id in bot.blacklistedUsers:
+        raise Blacklisted("You are blacklisted!")
+    return True
 
 
 @bot.event

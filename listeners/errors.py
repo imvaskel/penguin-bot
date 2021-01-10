@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import Cog
 import datetime
 import prettify_exceptions
+from utils.CustomErrors import *
 from datetime import datetime
 
 
@@ -24,7 +25,7 @@ class ErrorHandler(Cog, name="Errors"):
         ignored_errors = (commands.CommandNotFound)
         stringed_errors = (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument,
                            commands.BotMissingPermissions,
-                           discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument)
+                           discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument, Blacklisted)
 
         cog = ctx.cog
         if cog:

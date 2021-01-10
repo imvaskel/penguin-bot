@@ -106,7 +106,7 @@ class AnimalsCog(commands.Cog, name="Animal"):
         async with self.bot.session.get(f'https://http.cat/{http_code}') as res:
             r = io.BytesIO(await res.read())
 
-            await ctx.send(file=discord.File(r, f"{int}.png"))
+            await ctx.send(file=discord.File(r, f"{http_code}.png"))
 
 
 def setup(bot):
