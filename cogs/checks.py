@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
 from utils.CustomErrors import *
+from utils.CustomBot import PenguinBot
 
 class CheckCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: PenguinBot):
         self.bot = bot
+        bot.add_check(self.isBlacklisted)
 
-    @commands.Cog.bot_check()
     async def isBlacklisted(self, ctx):
         if ctx.author.id in self.bot.blacklistedUsers:
             raise Blacklisted("You are blacklisted!")
