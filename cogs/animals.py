@@ -110,11 +110,11 @@ class AnimalsCog(commands.Cog, name="Animal"):
 
     @commands.command(aliases=['http-dog'])
     async def httpdog(self, ctx, http_code: int):
-        """Returns an image of a cat from https://httpstatusdogs.com"""
-        async with self.bot.session.get(f'https://httpstatusdogs.com/img/{http_code}.png') as res:
+        """Returns an image of a dog from https://httpstatusdogs.com"""
+        async with self.bot.session.get(f'https://httpstatusdogs.com/img/{http_code}.jpeg') as res:
             r = io.BytesIO(await res.read())
 
-            await ctx.send(file=discord.File(r, f"{http_code}.png"))
+            await ctx.send(file=discord.File(r, f"{http_code}.jpeg"))
 
 
 
