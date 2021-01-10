@@ -6,6 +6,7 @@ from discord.ext import commands, ipc
 import datetime as dt
 import aiohttp
 from utils.CustomContext import PenguinContext
+from asyncdagpi import Client
 
 
 async def get_prefix(bot, message: discord.Message):
@@ -69,6 +70,7 @@ class PenguinBot(commands.AutoShardedBot):
             self.cache.update(d)
 
         self.get_announcement()
+        self.dagpi_client = Client(self.config['dagpi'])
 
     async def on_ipc_ready(self):
         print("ipc ready")
