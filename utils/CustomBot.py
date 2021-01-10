@@ -70,7 +70,7 @@ class PenguinBot(commands.AutoShardedBot):
             self.cache.update(d)
 
         self.get_announcement()
-        self.dagpi_client = Client(self.config['dagpi'])
+        self.dagpi_client = Client(self.config['default']['dagpi'])
 
     async def on_ipc_ready(self):
         print("ipc ready")
