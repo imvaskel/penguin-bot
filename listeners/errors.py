@@ -5,6 +5,7 @@ import datetime
 import prettify_exceptions
 from utils.CustomErrors import *
 from datetime import datetime
+import jishaku
 
 
 class ErrorEmbed(discord.Embed):
@@ -22,10 +23,11 @@ class ErrorHandler(Cog, name="Errors"):
 
     @Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
-        ignored_errors = (commands.CommandNotFound)
+        ignored_errors = (commands.CommandNotFound,)
         stringed_errors = (commands.MissingPermissions, commands.MissingRequiredArgument, commands.BadArgument,
                            commands.BotMissingPermissions,
-                           discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument, Blacklisted)
+                           discord.NotFound, commands.CommandOnCooldown, commands.BadUnionArgument, Blacklisted,
+                           commands.TooManyArguments)
 
         cog = ctx.cog
         if cog:
