@@ -9,7 +9,7 @@ from utils.CustomErrors import *
 
 startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
-                      'cogs.settings', 'cogs.checks'
+                      'cogs.settings', 'cogs.checks',
                       'listeners.errors', 'listeners.guilds', 'listeners.moderation',
                       'listeners.reactionroles', 'listeners.welcomer']
 
@@ -64,4 +64,4 @@ if __name__ == "__main__":
         except Exception as e:
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
-    bot.run(botSecret, bot=True)
+    bot.run(botSecret)
