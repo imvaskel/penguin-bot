@@ -7,8 +7,9 @@ from listeners.errors import ErrorEmbed
 class CheckCog(commands.Cog):
     def __init__(self, bot: PenguinBot):
         self.bot = bot
+        bot.add_check(blacklist)
 
-    async def bot_check(self, ctx):
+    async def blacklist(self, ctx):
         if ctx.author.id in self.bot.blacklistedUsers:
             raise Blacklisted("You are blacklisted!")
         return True
