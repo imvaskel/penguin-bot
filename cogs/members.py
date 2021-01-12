@@ -232,7 +232,7 @@ class MembersCog(commands.Cog, name="Meta"):
         if len(suggestion) > 200:
             await ctx.send("Suggestion is too long! It must be below 200 chars!")
             return
-        channel = self.bot.get_channel(765978141881139220)
+        channel = self.bot.get_channel(self.bot.config['suggestions-channel'])
         embed = discord.Embed(
             title="New Suggestion", timestamp=datetime.datetime.utcnow(), url=ctx.message.jump_url)
         embed.add_field(name=f"Suggestion #{len(await self.bot.db.fetch('SELECT id FROM suggestions')) + 1}",
@@ -297,7 +297,7 @@ class MembersCog(commands.Cog, name="Meta"):
             await ctx.send("Invalid status, use approved, rejected, or new.")
         await self.bot.db.execute("UPDATE suggestions SET status = $1 WHERE id = $2", status, id)
         await ctx.send(embed=discord.Embed(description=f"Changed the status of Suggestion `{id}` to `{status}`"))
-        channel = self.bot.get_channel(765978141881139220)
+        channel = self.bot.get_channel(self.bot.config['suggestions-channel'])
         await channel.send(
             embed=discord.Embed(description=f"Suggestion {id} status changed to {status}", color=embColors[status]))
 
@@ -312,7 +312,7 @@ class MembersCog(commands.Cog, name="Meta"):
         await self.bot.db.execute("UPDATE SUGGESTIONS SET text = $1, status = $2 WHERE id = $3",
                                   "Removed by the bot owner.", "rejected", id)
         await ctx.send(embed=discord.Embed(description=f"Deleted suggestion `{id}`"))
-        channel = self.bot.get_channel(765978141881139220)
+        channel = self.bot.get_channel(self.bot.config['suggestions-channel'])
         await channel.send(embed=discord.Embed(description=f"Suggestion {id} deleted.", color=discord.Color.red()))
 
     @commands.command()

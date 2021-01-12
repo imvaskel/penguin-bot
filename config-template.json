@@ -1,6 +1,7 @@
 {
   "token" : "",
   "log-channel" : 1,
+  "suggestions-channel" : 1,
   "nasa-api" : "",
   "dagpi" : "",
   "ipc-key" : "",
