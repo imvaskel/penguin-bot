@@ -23,7 +23,7 @@ class FunCog(commands.Cog, name="Fun"):
     def __init__(self, bot):
         self.bot = bot
         self.task = self.bot.loop.create_task(self.initialize())
-        self.nasa_api = bot.config['default']['NASA_API']
+        self.nasa_api = bot.config['nasa-api']
 
     async def initialize(self):
         self.session = aiohttp.ClientSession()

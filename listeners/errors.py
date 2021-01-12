@@ -55,7 +55,7 @@ class ErrorHandler(Cog, name="Errors"):
             await ctx.reply(embed=ErrorEmbed(description="You are blacklisted, join the support server to find out more https://penguin.vaskel.xyz/support"))
 
         else:
-            c = self.bot.get_channel(770685546724982845)
+            c = self.bot.get_channel(self.bot.config['log-channel'])
             prettify_exceptions.DefaultFormatter(
             ).theme['_ansi_enabled'] = False
             traceback = ''.join(prettify_exceptions.DefaultFormatter(

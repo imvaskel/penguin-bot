@@ -56,7 +56,6 @@ async def on_error(event, *args, **kwargs):
         raise
 
 if __name__ == "__main__":
-    botSecret = config['default']['BOT_SECRET']
     bot.ipc.start()
     for extension in startup_extensions:
         try:
@@ -64,4 +63,4 @@ if __name__ == "__main__":
         except Exception as e:
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
-    bot.run(botSecret)
+    bot.run(bot.config['token'])

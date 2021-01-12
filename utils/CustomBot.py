@@ -1,3 +1,5 @@
+import json
+
 import discord
 import asyncpg
 import asyncio
@@ -37,14 +39,15 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.start_time = dt.datetime.now()
 
-        self.config = toml.load('config.toml')
+        with open("config.json") as res:
+            self.config = json.load(res)
 
-        self.ipc = ipc.Server(self, "localhost", self.config['default']['ipc_port'], self.config['default']['ipc_key'])
+        self.ipc = ipc.Server(self, "localhost", self.config['ipc-port'], self.config['ipc-key'])
         self.load_extension("utils.ipc")
 
         self.db = self.loop.run_until_complete(
-            asyncpg.connect(user=self.config['default']['db_user'], password=self.config['default']['db_password'],
-                            database=self.config['default']['db_name'], host='127.0.0.1'))
+            asyncpg.connect(user=self.config['db']['username'], password=self.config['db']['password'],
+                            database=self.config['db']['db_name'], host='127.0.0.1'))
 
         # Cache stuff
         self.stats = {}
@@ -70,7 +73,7 @@ class PenguinBot(commands.AutoShardedBot):
             self.cache.update(d)
 
         self.get_announcement()
-        self.dagpi_client = Client(self.config['default']['dagpi'])
+        self.dagpi_client = Client(self.config['dagpi'])
 
     async def on_ipc_ready(self):
         print("ipc ready")
