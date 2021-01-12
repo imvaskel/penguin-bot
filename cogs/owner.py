@@ -155,7 +155,7 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
         msg = await ctx.send(embed=embedvar)
         async with ctx.channel.typing():
             c = self.bot.get_guild(
-                765977212498870305).get_channel(766011513156665385)
+                self.bot.config['support-server']).get_channel(self.bot.config['github-channel'])
             output = sp.getoutput('git pull origin master')
             await c.send(f""" ```sh
             {output} ```""")

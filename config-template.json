@@ -1,5 +1,7 @@
 {
   "token" : "",
+  "support-server" : 1,
+  "github-channel" : 1,
   "log-channel" : 1,
   "suggestions-channel" : 1,
   "nasa-api" : "",
