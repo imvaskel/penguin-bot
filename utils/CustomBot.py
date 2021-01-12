@@ -47,7 +47,7 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.db = self.loop.run_until_complete(
             asyncpg.connect(user=self.config['db']['username'], password=self.config['db']['password'],
-                            database=self.config['db']['db_name'], host='127.0.0.1'))
+                            database=self.config['db']['name'], host='127.0.0.1'))
 
         # Cache stuff
         self.stats = {}
