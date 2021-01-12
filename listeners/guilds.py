@@ -27,7 +27,7 @@ class GuildsListener(commands.Cog):
         with suppress(Exception):
             await self.bot.db.execute("DELETE FROM guild_config WHERE id = $1", guild.id)
 
-        c = self.bot.get_channel(781615213421658142)
+        c = self.bot.get_channel(self.bot.config['log-channel'])
 
         # Guild information sent to this channel
         embed = discord.Embed(
