@@ -221,6 +221,7 @@ class SettingsCog(commands.Cog, name="Settings"):
                                   f"{self.off_on[bool(guildCache['logId'])]} Logging"
                               ))
         await ctx.send(embed=embed)
+        await ctx.refresh_cache()
 
 
 def setup(bot):
