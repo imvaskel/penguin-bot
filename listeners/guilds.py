@@ -60,7 +60,7 @@ class GuildsListener(commands.Cog):
         self.bot.cache.update(d)
         print(f"I have joined {guild.name} [{guild.id}]")
 
-        c = self.bot.get_channel(781615213421658142)
+        c = self.bot.get_channel(self.bot.config['log-channel'])
         # Guild information sent to this channel
         embed = discord.Embed(
             title="Guild Joined!",
