@@ -1,0 +1,14 @@
+{
+  "token" : "",
+  "log-channel" : 1,
+  "nasa-api" : "",
+  "dagpi" : "",
+  "ipc-key" : "",
+  "ipc-port" : 1,
+  "db" : {
+    "username" : "",
+    "password" : "",
+    "name" : "",
+    "ip" : ""
+  }
+}
