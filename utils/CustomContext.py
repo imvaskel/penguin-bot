@@ -17,7 +17,14 @@ class PenguinContext(commands.Context):
     async def codeblock(self, text):
         """Makes the given text into a code block"""
         text = str(text)
+
         p = commands.Paginator()
-        p.add_line(text)
+
+        def split_string(string):
+            return string[:1900], string[1900:]
+
+        for entry in split_string(text):
+            p.add_line(entry)
+
         for page in p.pages:
             await self.send(page)
