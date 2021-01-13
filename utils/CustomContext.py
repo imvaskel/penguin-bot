@@ -16,6 +16,7 @@ class PenguinContext(commands.Context):
 
     async def codeblock(self, text):
         """Makes the given text into a code block"""
+        text = str(text)
         if len(text) > 2042: 
             return await self.send("Given text is too long")
         return await self.send("```" + text + "```")
