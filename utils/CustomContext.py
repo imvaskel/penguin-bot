@@ -13,3 +13,9 @@ class PenguinContext(commands.Context):
     async def refresh_cache(self):
         """Refreshes the cache for the guild in the ctx object"""
         self.bot.cache.update(self.bot.refresh_template(await self.bot.db.fetchrow("SELECT * FROM guild_config WHERE id = $1", self.guild.id)))
+
+    async def codeblock(self, text):
+        """Makes the given text into a code block"""
+        if len(text) > 2042: 
+            return await self.send("Given text is too long")
+        return await self.send("```" + text + "```")
