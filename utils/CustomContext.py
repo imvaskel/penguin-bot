@@ -28,3 +28,15 @@ class PenguinContext(commands.Context):
 
         for page in p.pages:
             await self.send(page)
+
+    async def send(self, content= None, *, tts=False, embed=None,
+               file=None, files=None, delete_after=None,
+               nonce=None, allowed_mentions=None, reference=None,
+               mention_author=None):
+        if content:
+            for key, value in self.bot.config.items():
+                content = content.replace(value, "[censored]")
+
+        return await super().send(content=content, file=file, embed=embed,
+                                  delete_after=delete_after, nonce=nonce,
+                                  allowed_mentions=allowed_mentions, tts=tts)
