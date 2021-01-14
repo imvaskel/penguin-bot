@@ -35,7 +35,7 @@ class PenguinContext(commands.Context):
                mention_author=None):
         if content:
             for key, value in self.bot.config.items():
-                content = content.replace(value, "[censored]")
+                content = content.replace(str(value), "[censored]")
 
         return await super().send(content=content, file=file, embed=embed,
                                   delete_after=delete_after, nonce=nonce,
