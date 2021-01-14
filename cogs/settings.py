@@ -29,6 +29,7 @@ class SettingsCog(commands.Cog, name="Settings"):
 
         self.bot.prefixes = dict(await self.bot.db.fetch("SELECT id, prefix FROM guild_config"))
         await ctx.send(embed=discord.Embed(description=f"Set {ctx.guild}'s prefix to {newPrefix}."))
+        await ctx.refresh_cache()
 
     @commands.guild_only()
     @commands.group(name="reactionroles", aliases=['reaction_roles', 'reactionrole', 'reaction_role'])
@@ -83,7 +84,7 @@ class SettingsCog(commands.Cog, name="Settings"):
 
         await ctx.reply(embed=discord.Embed(description=f"Set {channel.mention} to this guild's log channel."))
 
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @log_group.command(name='remove')
     @commands.guild_only()
@@ -96,7 +97,7 @@ class SettingsCog(commands.Cog, name="Settings"):
 
         await ctx.reply("Successfully removed the log channel for this guild.")
 
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @log_group.command(name='view')
     @commands.guild_only()
@@ -126,6 +127,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         elif ctx.guild.id in self.bot.welcome_dict:
             await self.bot.db.execute("UPDATE guild_config SET welcomeid = $1 WHERE id = $2", channel.id, ctx.guild.id)
         await ctx.send(embed=discord.Embed(description=f"Set {channel.mention} as the welcoming channel."))
+        await ctx.refresh_cache()
 
     @welcomer_group.command(name="set_message")
     @commands.guild_only()
@@ -142,7 +144,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         """
         await self.bot.db.execute("UPDATE guild_config SET welcomeMessage = $1 WHERE id = $2", message, ctx.guild.id)
         await ctx.send(f"Changed the welcome message to ```{message}```")
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @welcomer_group.command(name="delete", aliases=["remove_channel"])
     @commands.guild_only()
@@ -150,7 +152,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         """Removes the welcomer channel, which also disables the bot welcoming."""
         await self.bot.db.execute("UPDATE guild_config SET welcomeId = NULL")
         await ctx.send(embed=discord.Embed(description=f"Removed the welcome channel and disabled welcomer."))
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @welcomer_group.command(name="disable")
     @commands.guild_only()
@@ -159,7 +161,7 @@ class SettingsCog(commands.Cog, name="Settings"):
             return await ctx.send("Welcomer is already disabled!")
         await self.bot.db.execute("UPDATE guild_config SET welcomeEnabled = FALSE")
         await ctx.send("Disabled the welcomer, use `welcomer enable` to reenable")
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @welcomer_group.command(name="enable")
     @commands.guild_only()
@@ -168,7 +170,7 @@ class SettingsCog(commands.Cog, name="Settings"):
             return await ctx.send("Welcomer is already enabled!")
         await self.bot.db.execute("UPDATE guild_config SET welcomeEnabled = TRUE")
         await ctx.send("Enabled the welcomer, use `welcomer disable` to disable")
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @commands.group(name="autorole", aliases=["autoroles"])
     @commands.guild_only()
@@ -187,7 +189,7 @@ class SettingsCog(commands.Cog, name="Settings"):
             return await ctx.send("That role is either above me or is my top role!")
         await self.bot.db.execute("UPDATE guild_config SET autorole = $1 WHERE id = $2", role.id, ctx.guild.id)
         await ctx.send(embed=discord.Embed(description=f"Added autorole for role {role.mention}."))
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @autorole_group.command(name="remove")
     @commands.guild_only()
@@ -196,7 +198,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         """Removes guilds autorole"""
         await self.bot.db.execute("UPDATE guild_config SET autorole = null WHERE id = $1", ctx.guild.id)
         await ctx.send(embed=discord.Embed(description=f"Removed autorole"))
-        await self.bot.refresh_cache_for(ctx.guild.id)
+        await ctx.refresh_cache()
 
     @autorole_group.command(name="role")
     @commands.guild_only()
@@ -211,7 +213,6 @@ class SettingsCog(commands.Cog, name="Settings"):
     @commands.guild_only()
     async def configs(self, ctx):
         """Returns the state of the guilds configs"""
-        template = "ட {}\n"
         guildCache = self.bot.cache[ctx.guild.id]
         embed = discord.Embed(title="Configs",
                               description=(
@@ -221,7 +222,6 @@ class SettingsCog(commands.Cog, name="Settings"):
                                   f"{self.off_on[bool(guildCache['logId'])]} Logging"
                               ))
         await ctx.send(embed=embed)
-        await ctx.refresh_cache()
 
 
 def setup(bot):
