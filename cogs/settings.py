@@ -16,7 +16,7 @@ class SettingsCog(commands.Cog, name="Settings"):
 
     async def cog_command_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            return await ctx.reply(embed=ErrorEmbed(description="You don't have the `mange guilds` permission."))
+            return await ctx.reply(embed=ErrorEmbed(description="You do not have the manage guild permission!."))
 
     @commands.command()
     @commands.guild_only()
