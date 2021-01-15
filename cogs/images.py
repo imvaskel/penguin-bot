@@ -155,6 +155,61 @@ class Images(commands.Cog):
         buffer.seek(0)
         await ctx.send(file=discord.File(buffer, filename="emboss.png"))
 
+    @commands.command()
+    async def wasted(self, ctx, member: discord.Member = None):
+        """Wastes the author or given members profile picture"""
+        if member is None:
+            member = ctx.author
+        url = str(member.avatar_url_as(
+            format="png", static_format="png", size=1024))
+        try:
+            img = await self.bot.dagpi_client.image_process(ImageFeatures.wasted(), url)
+        except Exception as e:
+            return await ctx.send(f"``` \n {e} ```")
+        file = discord.File(fp=img.image, filename=f"wasted.{img.format}")
+        await ctx.send(embed=discord.Embed(color=0x31A1F1).set_image(url=f"attachment://wasted.{img.format}"), file=file)
+
+    @commands.command()
+    async def hog(self, ctx, member: discord.Member = None):
+        """Hogs (whatever that means) the author or given members profile picture"""
+        if member is None:
+            member = ctx.author
+        url = str(member.avatar_url_as(
+            format="png", static_format="png", size=1024))
+        try:
+            img = await self.bot.dagpi_client.image_process(ImageFeatures.hog(), url)
+        except Exception as e:
+            return await ctx.send(f"``` \n {e} ```")
+        file = discord.File(fp=img.image, filename=f"hog.{img.format}")
+        await ctx.send(embed=discord.Embed(color=0x31A1F1).set_image(url=f"attachment://hog.{img.format}"), file=file)
+
+    @commands.command()
+    async def sith(self, ctx, member: discord.Member = None):
+        """Makes the author or given member into a lego sith lord"""
+        if member is None:
+            member = ctx.author
+        url = str(member.avatar_url_as(
+            format="png", static_format="png", size=1024))
+        try:
+            img = await self.bot.dagpi_client.image_process(ImageFeatures.sith(), url)
+        except Exception as e:
+            return await ctx.send(f"``` \n {e} ```")
+        file = discord.File(fp=img.image, filename=f"stih.{img.format}")
+        await ctx.send(embed=discord.Embed(color=0x31A1F1).set_image(url=f"attachment://sith.{img.format}"), file=file)
+
+    @commands.command()
+    async def deepfry(self, ctx, member: discord.Member = None):
+        """Deepfries the author or given member"""
+        if member is None:
+            member = ctx.author
+        url = str(member.avatar_url_as(
+            format="png", static_format="png", size=1024))
+        try:
+            img = await self.bot.dagpi_client.image_process(ImageFeatures.deepfry(), url)
+        except Exception as e:
+            return await ctx.send(f"``` \n {e} ```")
+        file = discord.File(fp=img.image, filename=f"deepfry.{img.format}")
+        await ctx.send(embed=discord.Embed(color=0x31A1F1).set_image(url=f"attachment://deepfry.{img.format}"), file=file)
 
 def setup(bot):
     bot.add_cog(Images(bot))
