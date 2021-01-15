@@ -194,7 +194,7 @@ class Images(commands.Cog):
             img = await self.bot.dagpi_client.image_process(ImageFeatures.sith(), url)
         except Exception as e:
             return await ctx.send(f"``` \n {e} ```")
-        file = discord.File(fp=img.image, filename=f"stih.{img.format}")
+        file = discord.File(fp=img.image, filename=f"sith.{img.format}")
         await ctx.send(embed=discord.Embed(color=0x31A1F1).set_image(url=f"attachment://sith.{img.format}"), file=file)
 
     @commands.command()
