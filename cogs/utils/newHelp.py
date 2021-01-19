@@ -4,4 +4,5 @@ from listeners.errors import ErrorEmbed
 
 class PenguinHelp(commands.HelpCommand):
     def command_not_found(self, string):
-        return discord.Embed(description=string)
+        channel = self.get_destination()
+        return await channel.send(embed=discord.Embed(description=string))
