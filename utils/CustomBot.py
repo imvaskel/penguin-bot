@@ -34,7 +34,7 @@ class PenguinBot(commands.AutoShardedBot):
         return await super().get_context(message, cls=cls or PenguinContext)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(prefix = get_prefix,
+        super().__init__(prefix = get_prefix(),
                          description = "A moderation / fun bot",
                         intents = intents,
                          allowed_mentions = discord.AllowedMentions.none(),
