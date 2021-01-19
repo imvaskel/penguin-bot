@@ -8,6 +8,7 @@ class PenguinHelp(commands.HelpCommand):
         await channel.send(embed=discord.Embed(description=string))
 
     async def send_bot_help(self, mapping):
+        del mapping['IpcRoutes']
         filtered_commands = {key: await self.filter_commands(value) for key, value in mapping.items()}
         embed = discord.Embed(title = "Help",
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
