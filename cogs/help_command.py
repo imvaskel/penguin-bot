@@ -11,6 +11,7 @@ import unicodedata
 import inspect
 import itertools
 from typing import Union
+from cogs.utils.newHelp import PenguinHelp
 
 
 class Prefix(commands.Converter):
@@ -249,7 +250,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
 class HelpCog(commands.Cog, name="Help"):
     def __init__(self, bot):
         self.bot = bot
-        bot.help_command = PaginatedHelpCommand()
+        bot.help_command = PenguinHelp()
         bot.help_command.cog = self
 
 
