@@ -5,4 +5,15 @@ from listeners.errors import ErrorEmbed
 class PenguinHelp(commands.HelpCommand):
     async def command_not_found(self, string):
         channel = self.get_destination()
-        return await channel.send(embed=discord.Embed(description=string))
+        await channel.send(embed=discord.Embed(description=string))
+
+    async def send_bot_help(self, mapping):
+        filtered_commands = {key: await self.filter_commands(value) for key, value in mapping.items()}
+        embed = discord.Embed(title = "Help",
+                              description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
+        for cog, commands in filtered_commands:
+            embed.add_field(title = cog.qualified_name,
+                            value = "\n".join([
+                                f"`{command.name}`" for command in commands
+                            ]))
+        await self.get_destination().send(embed = embed)
