@@ -12,7 +12,7 @@ class PenguinHelp(commands.HelpCommand):
         embed = discord.Embed(title = "Help",
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
         for cog, commands in filtered_commands:
-            embed.add_field(title = cog.qualified_name,
+            embed.add_field(name = cog.qualified_name,
                             value = "\n".join([
                                 f"`{command.name}`" for command in commands
                             ]))
