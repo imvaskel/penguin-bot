@@ -13,6 +13,6 @@ class PenguinHelp(commands.HelpCommand):
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
         for cog, cmds in filtered_commands.items():
             embed.add_field(name = getattr(cog, "qualified_name", "None"),
-                            value = "\n".join([
-                                f"`{command.name}`" for command in cmds]))
+                            value = "    ".join([
+                                f"`{command.name}`" for command in cmds]) or "None")
         await self.get_destination().send(embed = embed)
