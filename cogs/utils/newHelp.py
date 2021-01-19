@@ -11,9 +11,9 @@ class PenguinHelp(commands.HelpCommand):
         filtered_commands = {key: await self.filter_commands(value) for key, value in mapping.items()}
         embed = discord.Embed(title = "Help",
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
-        for cog, commands in filtered_commands:
+        for cog, cmds in filtered_commands:
             embed.add_field(name = cog.qualified_name,
                             value = "\n".join([
-                                f"`{command.name}`" for command in commands
+                                f"`{command.name}`" for command in cmds if cog.qualified_name != "IpcRoutes"
                             ]))
         await self.get_destination().send(embed = embed)
