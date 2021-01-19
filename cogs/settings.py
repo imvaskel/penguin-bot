@@ -122,10 +122,7 @@ class SettingsCog(commands.Cog, name="Settings"):
         """Sets the welcoming channel"""
         if not channel.permissions_for(ctx.guild.me).send_messages:
             return await ctx.send("I can't send messages in that channel!")
-        if ctx.guild.id not in self.bot.welcome_dict:
-            await self.bot.db.execute("UPDATE welcome SET welcomeid = $2 WHERE id = $1", ctx.guild.id, channel.id)
-        elif ctx.guild.id in self.bot.welcome_dict:
-            await self.bot.db.execute("UPDATE guild_config SET welcomeid = $1 WHERE id = $2", channel.id, ctx.guild.id)
+        await self.bot.db.execute("UPDATE guild_config SET welcomeid = $2 WHERE id = $1", ctx.guild.id, channel.id)
         await ctx.send(embed=discord.Embed(description=f"Set {channel.mention} as the welcoming channel."))
         await ctx.refresh_cache()
 
