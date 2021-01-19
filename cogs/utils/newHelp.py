@@ -8,12 +8,12 @@ class PenguinHelp(commands.HelpCommand):
         await channel.send(embed=discord.Embed(description=string))
 
     async def send_bot_help(self, mapping):
-        filtered_commands = {key: await self.filter_commands(value) for key, value in mapping.items() if key.qualifed_name != "IpcRoutes"}
+        filtered_commands = {key: await self.filter_commands(value) for key, value in mapping.items() if }
         embed = discord.Embed(title = "Help",
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
         for cog, cmds in filtered_commands:
             embed.add_field(name = cog.qualified_name,
                             value = "\n".join([
-                                f"`{command.name}`" for command in cmds if cog.qualified_name != "IpcRoutes"
+                                f"`{command.name}`" for command in cmds if cog.qualifed_name != "IpcRoutes"
                             ]))
         await self.get_destination().send(embed = embed)
