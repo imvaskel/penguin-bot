@@ -12,8 +12,7 @@ class PenguinHelp(commands.HelpCommand):
         embed = discord.Embed(title = "Help",
                               description=f"Use `{self.clean_prefix}` help [command] or [module] for more help.")
         for cog, cmds in filtered_commands.items():
-            embed.add_field(name = cog.qualified_name,
+            embed.add_field(name = getattr(cog, "qualified_name", "None"),
                             value = "\n".join([
-                                f"`{command.name}`" for command in cmds if cog.qualifed_name != "IpcRoutes"
-                            ]))
+                                f"`{command.name}`" for command in cmds]))
         await self.get_destination().send(embed = embed)
