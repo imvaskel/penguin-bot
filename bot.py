@@ -22,17 +22,7 @@ intents.members = True
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-activity = discord.Activity(
-    type=discord.ActivityType.listening, name="@Penguin")
-
-
-bot = PenguinBot(description='',
-                 intents=intents,
-                 allowed_mentions=discord.AllowedMentions(
-                     roles=False, users=True, everyone=False, replied_user=False),
-                 embed_color=0x31A1F1,
-                 activity=activity,
-                 owner_ids={447422100798570496})
+bot = PenguinBot()
 
 @bot.event
 async def on_ready():

@@ -10,6 +10,8 @@ import aiohttp
 from utils.CustomContext import PenguinContext
 from asyncdagpi import Client
 
+intents = discord.Intents.default()
+intents.members = True
 
 async def get_prefix(bot, message: discord.Message):
     prefix = 'p,'
@@ -32,7 +34,14 @@ class PenguinBot(commands.AutoShardedBot):
         return await super().get_context(message, cls=cls or PenguinContext)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(get_prefix, *args, **kwargs)
+        super().__init__(prefix = get_prefix,
+                         description = "A moderation / fun bot",
+                        intents = intents,
+                         allowed_mentions = discord.AllowedMentions.none(),
+                         activity=discord.Activity(
+                             type=discord.ActivityType.listening, name="@Penguin"),
+                         owner_ids = {447422100798570496},
+                         **kwargs)
 
         self.loop = asyncio.get_event_loop()
         self.session = aiohttp.ClientSession()
