@@ -134,3 +134,6 @@ dmypy.json
 
 # Config
 config.*
+
+# Annoucement
+annoucement.txt
