@@ -1,6 +1,13 @@
 import discord
 from discord.ext import commands, menus
-from listeners.errors import ErrorEmbed
+from listeners.errors import ErrorEmbeds
+
+class FormatCogHelp:
+    def __init__(self, command: commands):
+        formatted = f"[{' | '.join([alias for alias in command.aliases])}]" if command.aliases else ""
+        formatted += "\nNone" if not command.help else "\n" + command.help
+        self.formatted = (command.name, formatted)
+        self.cog_name = command.cog_name
 
 class CogHelpSource(menus.ListPageSource):
     def __init__(self, data):
