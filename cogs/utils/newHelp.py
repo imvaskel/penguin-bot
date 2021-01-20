@@ -2,36 +2,30 @@ import discord
 from discord.ext import commands, menus
 from listeners.errors import ErrorEmbed
 
-class FormatCogHelp:
-    def __init__(self, command):
-        newline = "\n"
-        self.formatted = command.name
-        if command.aliases:
-           self.formatted += f"[{' | '.join([alias for alias in command.aliases])}]"
-        self.formatted += "\nNone" if not command.help else "\n" + command.help
-        
-
 class CogHelpSource(menus.ListPageSource):
-    def __init__(self):
-        super().__init__(source, per_page=6)
+    def __init__(self, data):
+        super().__init__(data, per_page=6)
 
-    async def format_page(self, menu, commands):
-        newline = "\n"
-        embed = discord.Embed(title = cog.qualified_name,
-        description= newline.join([command.formatted for command in commands]))
-        
-        embed.set_footer(text=f"Page {menu.current_page + 1}/{self.get_max_pages()}")
+    async def format_page(self, menu, entries):
+        offset = menu.current_page * self.per_page
+        embed = discord.Embed(title=entries[0].cog_name)
+
+        for i, v in enumerate(entries, start=offset):
+            command = v.formatted
+            embed.add_field(name = command[0],
+                            value = command[1],
+                            inline=False)
         return embed
 
 class CogHelpPages(menus.MenuPages):
     def __init__(self, source):
-        super().__init__(source, delete_message_after=True)         
+        super().__init__(source, delete_message_after=True)
 
 class PenguinHelp(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={
-            "cooldown" : commands.Cooldown(1, 5, commands.BucketType.member),
-            "help" : "The help command"
+            "cooldown": commands.Cooldown(1, 5, commands.BucketType.member),
+            "help": "The help command"
         })
 
     async def command_not_found(self, string):
@@ -50,5 +44,26 @@ class PenguinHelp(commands.HelpCommand):
         await self.get_destination().send(embed = embed)
     
     async def send_cog_help(self, cog):
-        menu = CogHelpPages(CogHelpSource([FormatCogHelp(command) for command in cog.get_commands()]))
+        menu = CogHelpPages(source=CogHelpSource([FormatCogHelp(command) for command in cog.get_commands()]))
         await menu.start(self.context)
+
+    async def send_command_help(self, command):
+        embed = discord.Embed(title= command.qualified_name,
+                              description = ("`<arg>` This is a required arg \n"
+                                             "`[arg]` This is optional \n"
+                                             "`[arg...]` This can have multiple args"))
+        command = (await self.filter_commands([command]))
+
+        if not command:
+            return await self.get_destination().send(embed = embed)
+
+        embed.add_field(name="Help",
+                        value = command.help or "None",
+                        inline=False)
+        embed.add_field(name="Aliases",
+                        value = "\n".join([f"`{alias}`" for alias in command.aliases]) or "None",
+                        inline=False)
+        embed.add_field(name="Args",
+                        value= command.signature or "None",
+                        inline=False)
+        await self.get_destination().send(embed = embed)
