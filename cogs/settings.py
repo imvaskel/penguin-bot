@@ -36,7 +36,7 @@ class SettingsCog(commands.Cog, name="Settings"):
     async def reactionroles(self, ctx):
         """A command that deals with reaction roles."""
         if ctx.invoked_subcommand is None:
-            await ctx.send(f'Incorrect block subcommand passed.')
+            await ctx.send_help(ctx.command)
 
     @reactionroles.command(help="Adds a reaction role on the given message, to delete it run `reactionrole remove <id>`", name='add')
     @commands.guild_only()
@@ -109,11 +109,11 @@ class SettingsCog(commands.Cog, name="Settings"):
             raise commands.BadArgument("This guild has no log channel set.")
 
     @commands.guild_only()
-    @commands.group(name="welcomer")
+    @commands.group(name="welcome", aliases =["welcomer"])
     async def welcomer_group(self, ctx):
         """Command group that deals with welcoming"""
         if ctx.invoked_subcommand is None:
-            await ctx.send("No subcommand passed, use `help welcomer` for help.")
+            await ctx.send_help(ctx.command)
 
     @welcomer_group.command(name="set", aliases=["set_channel"])
     @commands.guild_only()
