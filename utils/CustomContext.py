@@ -10,7 +10,8 @@ class PenguinContext(commands.Context):
         description = kwargs.get('description')
         color = kwargs.get('color', 0x36393E)
         timestamp = kwargs.get('timestamp', datetime.utcnow())
-        embed = discord.Embed(title=title, description=description, color=color, timestamp=timestamp)
+        url = kwargs.get("url", None)
+        embed = discord.Embed(title=title, description=description, color=color, timestamp=timestamp, url=url)
 
         embed.set_footer(icon_url=str(self.author.avatar_url), text=f"Requested by {self.author}")
 
