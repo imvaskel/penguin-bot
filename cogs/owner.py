@@ -3,24 +3,6 @@ from discord.ext import commands, menus
 import os
 import subprocess as sp
 from jishaku import codeblocks
-from .utils.paginator import SimplePages
-
-
-class SqlEntry:
-    __slots__ = ('data')
-
-    def __init__(self, entry):
-        self.data = str(entry)
-
-    def __str__(self):
-        return f'{self.data}'
-
-
-class SqlPages(SimplePages):
-    def __init__(self, entries, *, per_page=12):
-        converted = [SqlEntry(entry) for entry in entries]
-        super().__init__(converted, per_page=per_page)
-
 
 class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
     """Owner Commands"""
@@ -223,18 +205,6 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
             return await ctx.reply("You didn't provide a reply!")
         e = await ctx.fetch_message(messageId)
         await e.reply(reply)
-
-    @commands.is_owner()
-    @commands.command(hidden=True)
-    async def sql(self, ctx, *, query):
-        """Makes an sql SELECT query"""
-        query = codeblocks.codeblock_converter(query)[1]
-        e = await self.bot.db.fetch(query)
-        try:
-            p = SqlPages(entries=e, per_page=10)
-            await p.start(ctx)
-        except menus.MenuError as f:
-            await ctx.send(f)
 
     @commands.command(hidden=True)
     @commands.is_owner()

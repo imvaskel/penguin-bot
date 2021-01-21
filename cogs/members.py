@@ -13,36 +13,7 @@ import platform
 import inspect
 import os
 from discord.ext import commands, menus
-from .utils.paginator import SimplePages
 import typing
-
-
-class RolePageEntry:
-    __slots__ = ('id', 'user')
-
-    def __init__(self, entry):
-        self.id = entry.id
-        self.user = str(entry)
-
-    def __str__(self):
-        return f'{self.user} (ID: {self.id})'
-
-
-class RolePages(SimplePages):
-    def __init__(self, entries, *, per_page=12):
-        converted = [RolePageEntry(entry) for entry in entries]
-        super().__init__(converted, per_page=per_page)
-
-
-async def try_call(method, *args, exception=Exception, ret=False, **kwargs):
-    """one liner method that handles all errors in a single line which returns None, or Error instance depending on ret
-       value.
-    """
-    try:
-        return await discord.utils.maybe_coroutine(method, *args, **kwargs)
-    except exception as e:
-        return (None, e)[ret]
-
 
 class MembersCog(commands.Cog, name="Meta"):
     """Commands that give information about things"""
@@ -252,15 +223,6 @@ class MembersCog(commands.Cog, name="Meta"):
         days, hours = divmod(hours, 24)
         await ctx.send(embed=discord.Embed(description=f"{days}d, {hours}h, {minutes}m, {seconds}s"))
 
-    @commands.command(help="Returns paged list of all users with the given role.", aliases=["role_members"])
-    @commands.guild_only()
-    async def members(self, ctx, *, role: discord.Role):
-        try:
-            p = RolePages(entries=role.members, per_page=20)
-            await p.start(ctx)
-        except menus.MenuError as e:
-            await ctx.send(e)
-
     @commands.group(name="suggestion", aliases=["suggestions"])
     @commands.guild_only()
     async def suggestion(self, ctx):
@@ -335,41 +297,9 @@ class MembersCog(commands.Cog, name="Meta"):
 
     @commands.command()
     async def source(self, ctx, *, command: str = None):
-        """Displays my full source code or for a specific command.
-        To display the source code of a subcommand you can separate it by
-        periods
-        """
-        source_url = 'https://github.com/imvaskel/penguin-bot'
-        branch = 'master'
-        if command is None:
-            return await ctx.send(source_url)
-
-        if command == 'help':
-            src = type(self.bot.help_command)
-            module = src.__module__
-            filename = inspect.getsourcefile(src)
-        else:
-            obj = self.bot.get_command(command.replace('.', ' '))
-            if obj is None:
-                return await ctx.send('Could not find command.')
-
-            # since we found the command we're looking for, presumably anyway, let's
-            # try to access the code itself
-            src = obj.callback.__code__
-            module = obj.callback.__module__
-            filename = src.co_filename
-
-        lines, firstlineno = inspect.getsourcelines(src)
-        if not module.startswith('discord'):
-            # not a built-in command
-            location = os.path.relpath(filename).replace('\\', '/')
-        else:
-            location = module.replace('.', '/') + '.py'
-            source_url = 'https://github.com/Rapptz/discord.py'
-            branch = 'master'
-
-        final_url = f'<{source_url}/blob/{branch}/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>'
-        await ctx.send(final_url)
+        """Returns a link to my source code :)"""
+        await ctx.send(("Here's a link to my repo :) make sure to abide by the license \n"
+                        "<https://github.com/imvaskel/penguin-bot>"))
 
     @commands.command()
     async def roleinfo(self, ctx, role: discord.Role = None):
