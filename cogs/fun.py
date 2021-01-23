@@ -15,7 +15,7 @@ from discord.ext.commands.core import command
 import zipfile
 from io import BytesIO
 from jishaku import codeblocks
-
+import json
 
 class FunCog(commands.Cog, name="Fun"):
     """ Commands that serve no use except for being fun. """
@@ -158,8 +158,9 @@ class FunCog(commands.Cog, name="Fun"):
     async def embed(self, ctx, embedCode):
         """Makes an embed from JSON, use https://embedbuilder.nadekobot.me/ to make it. You can use codeblocks and it will get the JSON from them."""
         embedCode = codeblocks.codeblock_converter(embedCode)
+        embedCode = json.loads(embedCode[1]
         try:
-            embed = discord.Embed.from_dict(embedCode[0])
+            embed = discord.Embed.from_dict(embedCode)
         except Exception as e:
             return await ctx.send(f"An error occurred, probably because the embed was invalid ``` {e} ```")
         await ctx.send(embed=embed)
