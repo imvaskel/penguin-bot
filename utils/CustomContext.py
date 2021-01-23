@@ -47,3 +47,6 @@ class PenguinContext(commands.Context):
         return await super().send(content=content, file=file, embed=embed,
                                   delete_after=delete_after, nonce=nonce,
                                   allowed_mentions=allowed_mentions, tts=tts)
+
+    def cache(self):
+        return self.bot.cache[self.guild.id]
