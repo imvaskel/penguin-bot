@@ -155,9 +155,8 @@ class FunCog(commands.Cog, name="Fun"):
         await ctx.send(embed=discord.Embed(description=text).set_footer(text=f"Requested by {str(ctx.author)}"))
 
     @commands.command()
-    async def embed(self, ctx, embedCode):
+    async def embed(self, ctx, *, embedCode: codeblocks.codeblock_converter):
         """Makes an embed from JSON, use https://embedbuilder.nadekobot.me/ to make it. You can use codeblocks and it will get the JSON from them."""
-        embedCode = codeblocks.codeblock_converter(embedCode)
         try:
             embed = discord.Embed.from_dict(json.loads(embedCode[1]))
         except Exception as e:
