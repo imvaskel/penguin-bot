@@ -8,6 +8,7 @@
   "dagpi" : "",
   "ipc-key" : "",
   "ipc-port" : 1,
+  "website" : "https://x.y/",
   "db" : {
     "username" : "",
     "password" : "",

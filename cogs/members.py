@@ -355,12 +355,12 @@ Mention: {role.mention}""",
     @commands.command()
     async def dashboard(self, ctx):
         """Returns a link to the dashboard"""
-        await ctx.embed(title="Dashboard", url="https://penguin.vaskel.xyz/config/")
+        await ctx.embed(title="Dashboard", url=f"{self.bog.config['website']}config/")
 
     @commands.command()
     async def website(self, ctx):
         """Returns the website link"""
-        await ctx.embed(title="Website", url="https://penguin.vaskel.xyz/")
+        await ctx.embed(title="Website", url=f"{self.bot.config['website']}")
 
 
 def setup(bot):
