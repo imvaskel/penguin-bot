@@ -208,7 +208,14 @@ class FunCog(commands.Cog, name="Fun"):
 
         await ctx.send(f"Completed in `{end-start:.2f}`s", file=discord.File(emojis, filename=f"{ctx.guild}-emojis.zip"))
 
-
+    @commands.command()
+    async def xkcd(self, ctx, comic: int):
+        async with self.bot.session.get(f"http://xkcd.com/{comic}/info.0.json") as res:
+            if res.status == 404:
+                raise commands.BadArgument("Comic must be valid")
+            r = await res.json()
+            await ctx.send(
+                embed=discord.Embed(title=f"XKCD #{comic}", description=r['safe_title']).set_image(url=r['img']))
 
 
 def setup(bot):
