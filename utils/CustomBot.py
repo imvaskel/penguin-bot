@@ -94,7 +94,7 @@ class PenguinBot(commands.AutoShardedBot):
         d = {
             record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
                            "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
-                           "welcomeId": record["welcomeid"], "logId": record['log_id'], 'log' : record['log']}
+                           "welcomeId": record["welcomeid"], "logId": record['log_id']}
         }
         return d
 
