@@ -268,24 +268,5 @@ class OwnerCog(commands.Cog, name="Owner", command_attrs=dict(hidden=True)):
         self.bot.announcement = announcement
         await ctx.reply("Successfully set the announcement")
 
-    @commands.command()
-    @commands.is_owner()
-    async def test(self, ctx, *, text):
-        """Sends a test messge to a test webhook."""
-        webhook = Webhook.from_url(self.bot.config['webhook-url'], adapter=AsyncWebhookAdapter(self.bot.session))
-        await webhook.send(text, username="Test", avatar_url=str(ctx.author.avatar_url))
-
-    @commands.command()
-    @commands.is_owner()
-    @commands.bot_has_guild_permissions(manage_webhooks=True)
-    async def test_logging(self, ctx, channel: discord.TextChannel):
-        """Creates a webhook for the given channel for logging"""
-        hook = await channel.create_webhook(name="Penguin Logging", reason="Automatically created")
-        await self.bot.db.execute("UPDATE guild_config SET log = $1 WHERE id = $2", hook.url, ctx.guild.id)
-        await ctx.send("Sending a message to the webhook.")
-        await hook.send('Test Message', username="Penguin Logging", avatar_url=str(ctx.me.avatar_url))
-
-
-
 def setup(bot):
     bot.add_cog(OwnerCog(bot))
