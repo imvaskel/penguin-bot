@@ -3,12 +3,13 @@ import datetime
 from discord.ext import commands
 from contextlib import suppress
 import asyncpg
+from discord import AsyncWebhookAdapter, Webhook
 
 
 class GuildsListener(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.limit = 0.70
+        self.limit = 0.90
 
     @commands.Cog.listener('on_guild_join')
     async def botfarm(self, guild):
@@ -27,8 +28,6 @@ class GuildsListener(commands.Cog):
         with suppress(Exception):
             await self.bot.db.execute("DELETE FROM guild_config WHERE id = $1", guild.id)
 
-        c = self.bot.get_channel(self.bot.config['log-channel'])
-
         # Guild information sent to this channel
         embed = discord.Embed(
             title="Guild Left!",
@@ -42,7 +41,8 @@ class GuildsListener(commands.Cog):
                          ),
             timestamp=datetime.datetime.utcnow()
         )
-        await c.send(embed=embed)
+        webhook = Webhook.from_url(self.bot.config['webhook-url'], adapter=AsyncWebhookAdapter(self.bot.session))
+        await webhook.send(embed=embed, avatar_url=str(guild.icon_url), username=str(guild))
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild: discord.Guild):
@@ -58,9 +58,7 @@ class GuildsListener(commands.Cog):
         d = self.bot.refresh_template(record)
 
         self.bot.cache.update(d)
-        print(f"I have joined {guild.name} [{guild.id}]")
 
-        c = self.bot.get_channel(self.bot.config['log-channel'])
         # Guild information sent to this channel
         embed = discord.Embed(
             title="Guild Joined!",
@@ -74,7 +72,8 @@ class GuildsListener(commands.Cog):
                          ),
             timestamp=datetime.datetime.utcnow()
         )
-        await c.send(embed=embed)
+        webhook = Webhook.from_url(self.bot.config['webhook-url'], adapter=AsyncWebhookAdapter(self.bot.session))
+        await webhook.send(embed=embed, avatar_url=str(guild.icon_url), username=str(guild))
 
 
 def setup(bot):

@@ -5,14 +5,16 @@
   "log-channel" : 1,
   "suggestions-channel" : 1,
   "nasa-api" : "",
+  "zane" : "",
   "dagpi" : "",
   "ipc-key" : "",
   "ipc-port" : 1,
   "website" : "https://x.y/",
+  "webhook-url" : "",
   "db" : {
-    "username" : "",
+    "user" : "",
     "password" : "",
-    "name" : "",
+    "database" : "",
     "ip" : ""
   }
 }

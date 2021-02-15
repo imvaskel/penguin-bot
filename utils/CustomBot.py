@@ -55,8 +55,10 @@ class PenguinBot(commands.AutoShardedBot):
         self.load_extension("utils.ipc")
 
         self.db = self.loop.run_until_complete(
-            asyncpg.connect(user=self.config['db']['username'], password=self.config['db']['password'],
-                            database=self.config['db']['name'], host='127.0.0.1'))
+            asyncpg.create_pool(
+               **self.config['db']
+            )
+        )
 
         # Cache stuff
         self.stats = {}
@@ -83,6 +85,7 @@ class PenguinBot(commands.AutoShardedBot):
 
         self.get_announcement()
         self.dagpi_client = Client(self.config['dagpi'])
+        self.command_stats = {}
 
     async def on_ipc_ready(self):
         print("ipc ready")
@@ -91,7 +94,7 @@ class PenguinBot(commands.AutoShardedBot):
         d = {
             record["id"]: {"prefix": record["prefix"], "autorole": record["autorole"],
                            "welcomeMessage": record["welcomemessage"], "welcomeEnabled": record["welcomeenabled"],
-                           "welcomeId": record["welcomeid"], "logId": record['log_id']}
+                           "welcomeId": record["welcomeid"], "logId": record['log_id'], 'log' : record['log']}
         }
         return d
 

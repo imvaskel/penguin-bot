@@ -20,6 +20,13 @@ class ListenerCog(commands.Cog, name="Listener"):
             ctx = await self.bot.get_context(after)
             await self.bot.invoke(ctx)
 
+    @commands.Cog.listener('on_command')
+    async def on_command(self, ctx):
+        try:
+            self.bot.command_stats[ctx.command.name] += 1
+        except KeyError:
+            self.bot.command_stats[ctx.command.name] = 1
+
 
 def setup(bot):
     bot.add_cog(ListenerCog(bot))

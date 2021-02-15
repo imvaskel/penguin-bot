@@ -343,7 +343,10 @@ Mention: {role.mention}""",
     async def vote(self, ctx):
         """Returns voting links"""
         embed = discord.Embed(title="__Voting Links__",
-                              description="[Top.GG](https://top.gg/bot/753037464599527485) \n[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)")
+                              description=(
+                                  "[Top.GG](https://top.gg/bot/753037464599527485) \n"
+                                  "[Discord Extreme List](https://discordextremelist.xyz/en-US/bots/penguin)"
+                                  "[Discord Boats](https://discord.boats/bot/753037464599527485)"))
 
         await ctx.send(embed=embed)
 

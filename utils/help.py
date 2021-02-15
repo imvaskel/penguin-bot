@@ -1,20 +1,20 @@
 import discord
 from discord.ext import commands, menus
 
-class FormatCogHelp:
-    def __init__(self, command: commands.Command):
-        formatted = f"[{' | '.join([alias for alias in command.aliases])}]" if command.aliases else ""
-        formatted += "\nNone" if not command.help else "\n" + command.help
-        self.formatted = (command.name, formatted)
-        self.cog_name = command.cog_name
+def safe_get(list, index, default=None):
+    try:
+        return list[index]
+    except IndexError:
+        return default
 
 class GroupHelpSource(menus.ListPageSource):
-    def __init__(self, data):
+    def __init__(self, group, data):
         super().__init__(data, per_page=5)
+        self.group = group
 
     async def format_page(self, menu, entries):
         offset = menu.current_page * self.per_page
-        embed = discord.Embed(title = entries[0].root_parent.qualified_name,
+        embed = discord.Embed(title = str(self.group),
                               color=0x36393E)
 
         for index, command in enumerate(entries, start=offset):
@@ -23,23 +23,32 @@ class GroupHelpSource(menus.ListPageSource):
                                 f"[{' | '.join([alias for alias in command.aliases])}] \n" if command.aliases else ""
                                 f"{command.help or 'None'}"
                             ))
+
+        embed.set_footer(text=f"Page {menu.current_page + 1} / {self.get_max_pages()}" if
+            self.get_max_pages() > 0 else "Page 0/0")
         return embed
 
 class CogHelpSource(menus.ListPageSource):
-    def __init__(self, data):
+    def __init__(self, cog, data):
         super().__init__(data, per_page=6)
+        self.cog = cog
 
     async def format_page(self, menu, entries):
         offset = menu.current_page * self.per_page
-        embed = discord.Embed(title=entries[0].cog_name,
+        embed = discord.Embed(title=self.cog.qualified_name,
                               color= 0x36393E)
 
-        for i, v in enumerate(entries, start=offset):
-            command = v.formatted
-            embed.add_field(name = command[0],
-                            value = command[1],
-                            inline=False)
-        embed.set_footer(text = f"Page {menu.current_page+1} / {self.get_max_pages()}")
+        for index, command in enumerate(entries, start=offset):
+            embed.add_field(
+                name=f"**{str(command)}** [{' | '.join(alias for alias in command.aliases)}]" if command.aliases else f"**{str(command)}**",
+                value=(
+                    f"{command.help}" or "None"
+                ), inline=False
+            )
+
+        embed.set_footer(text = f"Page {menu.current_page+1} / {self.get_max_pages()}"
+        if self.get_max_pages() > 0 else "Page 0/0")
+
         return embed
 
 class CogHelpPages(menus.MenuPages):
@@ -50,7 +59,8 @@ class PenguinHelp(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={
             "cooldown": commands.Cooldown(1, 5, commands.BucketType.member),
-            "help": "The help command"
+            "help": "The help command",
+            "aliases": ["h"]
         })
 
     async def command_not_found(self, string):
@@ -69,7 +79,7 @@ class PenguinHelp(commands.HelpCommand):
         await self.get_destination().send(embed = embed)
     
     async def send_cog_help(self, cog):
-        menu = CogHelpPages(source=CogHelpSource([FormatCogHelp(command) for command in cog.get_commands()]))
+        menu = CogHelpPages(source=CogHelpSource(cog, await self.filter_commands(cog.get_commands())))
         await menu.start(self.context)
 
     async def send_command_help(self, command):
@@ -78,7 +88,9 @@ class PenguinHelp(commands.HelpCommand):
                                              "`[arg]` This is optional \n"
                                              "`[arg...]` This can have multiple args"),
                               color=0x36393E)
-        command = (await self.filter_commands([command]))[0]
+        command = (await self.filter_commands([command]))
+
+        command = command[0] if len(command) == 1 else None
 
         if not command:
             return await self.get_destination().send(embed = embed)
@@ -95,5 +107,5 @@ class PenguinHelp(commands.HelpCommand):
         await self.get_destination().send(embed = embed)
 
     async def send_group_help(self, group: commands.Group):
-        menu = CogHelpPages(source=GroupHelpSource([command for command in group.commands]))
+        menu = CogHelpPages(source=GroupHelpSource(group, await self.filter_commands(group.commands)))
         await menu.start(self.context)

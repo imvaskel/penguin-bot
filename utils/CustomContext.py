@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from datetime import datetime
+import asyncio
 
 class PenguinContext(commands.Context):
 
@@ -21,20 +22,13 @@ class PenguinContext(commands.Context):
         """Refreshes the cache for the guild in the ctx object"""
         self.bot.cache.update(self.bot.refresh_template(await self.bot.db.fetchrow("SELECT * FROM guild_config WHERE id = $1", self.guild.id)))
 
-    async def codeblock(self, text):
+    async def codeblock(self, text, **kwargs):
         """Makes the given text into a code block"""
+        code = kwargs.get('language')
+
         text = str(text)
 
-        p = commands.Paginator()
-
-        def split_string(string):
-            return string[:1900], string[1900:]
-
-        for entry in split_string(text):
-            p.add_line(entry)
-
-        for page in p.pages:
-            await self.send(page)
+        await self.send(f"```{code or ''}\n {text} ```")
 
     async def send(self, content= None, *, tts=False, embed=None,
                file=None, files=None, delete_after=None,
@@ -50,3 +44,29 @@ class PenguinContext(commands.Context):
 
     def cache(self):
         return self.bot.cache[self.guild.id]
+
+    async def confirm(self, text = None, **kwargs) -> bool:
+        """Uses wait_for to confirm, returns a bool"""
+        reactions = ["<:redTick:775792645728895038>", "<:greentick:770685801297215488>"]
+        msg = None
+        if text is not None:
+            msg = await self.send(text)
+        elif kwargs.get('embed') is not None:
+            msg = await self.send(embed = kwargs.get('embed'))
+        else:
+            raise commands.BadArgument("There was not a text or embed input.")
+
+        for r in reactions:
+            await msg.add_reaction(r)
+
+        try:
+            reaction, member = await self.bot.wait_for('reaction_add', check = (
+                lambda r, u : r.message.id == msg.id and
+                u.id == self.author.id and
+                str(r) in reactions
+            )
+                , timeout = 30)
+            return bool(reactions.index(str(reaction)))
+        except asyncio.TimeoutError:
+            await self.send("You did not confirm in time.")
+            return False

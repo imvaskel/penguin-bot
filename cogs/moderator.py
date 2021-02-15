@@ -3,6 +3,8 @@ from discord.ext import commands
 from utils.CustomBot import PenguinBot
 from contextlib import suppress
 
+def hierarchy_check(ctx, member):
+    """A check for hierarchy for the bot, the author, etc."""
 
 class ModeratorCog(commands.Cog, name="Moderator"):
     """Commands for moderators"""

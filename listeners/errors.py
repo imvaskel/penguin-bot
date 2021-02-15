@@ -2,10 +2,10 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
 import datetime
-import prettify_exceptions
 from utils.CustomErrors import *
 from datetime import datetime
 import jishaku
+import traceback
 
 
 class ErrorEmbed(discord.Embed):
@@ -55,13 +55,10 @@ class ErrorHandler(Cog, name="Errors"):
             await ctx.reply(embed=ErrorEmbed(description="You are blacklisted, join the support server to find out more https://penguin.vaskel.xyz/support"))
 
         else:
-            c = self.bot.get_channel(self.bot.config['log-channel'])
-            prettify_exceptions.DefaultFormatter(
-            ).theme['_ansi_enabled'] = False
-            traceback = ''.join(prettify_exceptions.DefaultFormatter(
-            ).format_exception(type(error), error, error.__traceback__))
 
-            url = str(await self.bot.mystbin.post(traceback)) if len(traceback) > 512 else None
+            tback = ''.join(traceback.format_exception(type(error), error, error.__traceback__))
+
+            url = str(await self.bot.mystbin.post(tback)) if len(tback) > 512 else None
 
             embed = ErrorEmbed(
                 description=url or f"```{traceback}```",
@@ -82,7 +79,10 @@ class ErrorHandler(Cog, name="Errors"):
                     f"Command: `{ctx.command}`"
                 )
             )
-            await c.send(embed=embed)
+
+            webhook = discord.Webhook.from_url(self.bot.config['webhook-url'], adapter=discord.AsyncWebhookAdapter(self.bot.session))
+
+            await webhook.send(embed=embed, avatar_url=str(ctx.author.avatar_url), username="Error Occured")
 
 
 def setup(bot):

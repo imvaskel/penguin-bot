@@ -31,40 +31,40 @@ class SettingsCog(commands.Cog, name="Settings"):
         await ctx.send(embed=discord.Embed(description=f"Set {ctx.guild}'s prefix to {newPrefix}."))
         await ctx.refresh_cache()
 
-    @commands.guild_only()
-    @commands.group(name="reactionroles", aliases=['reaction_roles', 'reactionrole', 'reaction_role'])
-    async def reactionroles(self, ctx):
-        """A command that deals with reaction roles."""
-        if ctx.invoked_subcommand is None:
-            await ctx.send_help(ctx.command)
-
-    @reactionroles.command(help="Adds a reaction role on the given message, to delete it run `reactionrole remove <id>`", name='add')
-    @commands.guild_only()
-    @commands.has_permissions(manage_roles=True)
-    @commands.bot_has_permissions(manage_roles=True)
-    async def reaction_roles_add(self, ctx, message: discord.Message, role: discord.Role):
-        if role > ctx.guild.me.top_role or role == ctx.guild.me.top_role:
-            return await ctx.send("That role is either above me or is my top role!")
-        await message.add_reaction("\U00002705")
-        await self.bot.db.execute("INSERT INTO reaction_roles(msg_id, role_id, guild_id) VALUES ($1, $2, $3)", message.id, role.id, ctx.guild.id)
-        self.bot.reactionRoleDict = dict(await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles"))
-        await ctx.send(embed=discord.Embed(description=f"Added a reaction role to {message.id} that gives role {role.name}"))
-
-    @reactionroles.command(help="Removes a reaction role from the given message id", name='remove')
-    @commands.guild_only()
-    @commands.has_permissions(manage_roles=True)
-    async def reaction_roles_remove(self, ctx, messageId: int):
-        await self.bot.db.execute("DELETE FROM reaction_roles WHERE msg_id = $1", messageId)
-        self.bot.reactionRoleDict = dict(await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles"))
-        await ctx.send(embed=discord.Embed(description=f"Removed the reaction role from the message id {messageId}"))
-
-    @reactionroles.command(help="Lists the current reaction roles in the guild with their message id and the role id", name='list')
-    @commands.guild_only()
-    async def reaction_roles_list(self, ctx):
-        l = ""
-        for entry in await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles WHERE guild_id = $1", ctx.guild.id):
-            l += f"Message ID: {entry[0]} Role ID: {entry[1]}\n"
-        await ctx.send(embed=discord.Embed(description=l, color=discord.Color.from_rgb(48, 162, 242)))
+    # @commands.guild_only()
+    # @commands.group(name="reactionroles", aliases=['reaction_roles', 'reactionrole', 'reaction_role'])
+    # async def reactionroles(self, ctx):
+    #     """A command that deals with reaction roles."""
+    #     if ctx.invoked_subcommand is None:
+    #         await ctx.send_help(ctx.command)
+    #
+    # @reactionroles.command(help="Adds a reaction role on the given message, to delete it run `reactionrole remove <id>`", name='add')
+    # @commands.guild_only()
+    # @commands.has_permissions(manage_roles=True)
+    # @commands.bot_has_permissions(manage_roles=True)
+    # async def reaction_roles_add(self, ctx, message: discord.Message, role: discord.Role):
+    #     if role > ctx.guild.me.top_role or role == ctx.guild.me.top_role:
+    #         return await ctx.send("That role is either above me or is my top role!")
+    #     await message.add_reaction("\U00002705")
+    #     await self.bot.db.execute("INSERT INTO reaction_roles(msg_id, role_id, guild_id) VALUES ($1, $2, $3)", message.id, role.id, ctx.guild.id)
+    #     self.bot.reactionRoleDict = dict(await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles"))
+    #     await ctx.send(embed=discord.Embed(description=f"Added a reaction role to {message.id} that gives role {role.name}"))
+    #
+    # @reactionroles.command(help="Removes a reaction role from the given message id", name='remove')
+    # @commands.guild_only()
+    # @commands.has_permissions(manage_roles=True)
+    # async def reaction_roles_remove(self, ctx, messageId: int):
+    #     await self.bot.db.execute("DELETE FROM reaction_roles WHERE msg_id = $1", messageId)
+    #     self.bot.reactionRoleDict = dict(await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles"))
+    #     await ctx.send(embed=discord.Embed(description=f"Removed the reaction role from the message id {messageId}"))
+    #
+    # @reactionroles.command(help="Lists the current reaction roles in the guild with their message id and the role id", name='list')
+    # @commands.guild_only()
+    # async def reaction_roles_list(self, ctx):
+    #     l = ""
+    #     for entry in await self.bot.db.fetch("SELECT msg_id, role_id FROM reaction_roles WHERE guild_id = $1", ctx.guild.id):
+    #         l += f"Message ID: {entry[0]} Role ID: {entry[1]}\n"
+    #     await ctx.send(embed=discord.Embed(description=l, color=discord.Color.from_rgb(48, 162, 242)))
 
     @commands.guild_only()
     @commands.group(name="log")

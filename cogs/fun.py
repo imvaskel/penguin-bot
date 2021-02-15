@@ -3,15 +3,9 @@ import functools
 import discord
 from discord.ext import commands
 import aiohttp
-import datetime
-import asyncio
 import io
-import configparser
 import time
-from collections import deque
 from discord.ext.commands.cooldowns import BucketType
-from asyncdagpi import Client, ImageFeatures
-from discord.ext.commands.core import command
 import zipfile
 from io import BytesIO
 from jishaku import codeblocks
@@ -22,15 +16,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     def __init__(self, bot):
         self.bot = bot
-        self.task = self.bot.loop.create_task(self.initialize())
         self.nasa_api = bot.config['nasa-api']
-
-    async def initialize(self):
-        self.session = aiohttp.ClientSession()
-
-    def cog_unload(self):
-        self.task.cancel()
-        self.session.close()
 
     async def _get_and_zip_all_emojis(self, guild: discord.Guild):
         buffer = BytesIO()
@@ -50,7 +36,7 @@ class FunCog(commands.Cog, name="Fun"):
         elif date != "":
             url = f"https://api.nasa.gov/planetary/apod?date={date}&api_key={self.nasa_api}"
 
-        async with self.session.get(url) as r:
+        async with self.bot.session.get(url) as r:
             res = await r.json()
 
             try:
@@ -66,7 +52,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(help="Returns a random gif of a pat")
     async def pat(self, ctx):
-        async with self.session.get("https://some-random-api.ml/animu/pat") as r:
+        async with self.bot.session.get("https://some-random-api.ml/animu/pat") as r:
             res = await r.json()
             embed = discord.Embed(title="Pat")
             embed.set_image(url=res['link'])
@@ -74,7 +60,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(help="Returns a random meme")
     async def meme(self, ctx):
-        async with self.session.get("https://some-random-api.ml/meme") as r:
+        async with self.bot.session.get("https://some-random-api.ml/meme") as r:
             res = await r.json()
             embed = discord.Embed(title=str(res['caption']))
             embed.set_image(url=res['image'])
@@ -84,7 +70,7 @@ class FunCog(commands.Cog, name="Fun"):
     async def reddit(self, ctx, subreddit):
         url = f"https://reddit.com/r/{subreddit}/random.json?limit=1"
 
-        async with self.session.get(f"https://reddit.com/r/{subreddit}/random.json?limit=1") as r:
+        async with self.bot.session.get(f"https://reddit.com/r/{subreddit}/random.json?limit=1") as r:
             res = await r.json()
             s = ""
             try:
@@ -108,7 +94,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(help="Returns a random pikachu gif or image")
     async def pikachu(self, ctx):
-        async with self.session.get('https://some-random-api.ml/img/pikachu') as r:
+        async with self.bot.session.get('https://some-random-api.ml/img/pikachu') as r:
             res = await r.json()
             embed = discord.Embed(title="Pikachu")
             embed.set_image(url=res['link'])
@@ -116,7 +102,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(help="Returns a random joke")
     async def joke(self, ctx):
-        async with self.session.get('https://some-random-api.ml/joke') as r:
+        async with self.bot.session.get('https://some-random-api.ml/joke') as r:
             res = await r.json()
             embed = discord.Embed(title="Joke", description=res['joke'])
             await ctx.send(embed=embed)
@@ -136,7 +122,7 @@ class FunCog(commands.Cog, name="Fun"):
 
         embed = discord.Embed(
             title=f"Screenshot of {url}", color=discord.Color.from_rgb(48, 162, 242))
-        async with self.session.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
+        async with self.bot.session.get(f'https://image.thum.io/get/width/1920/crop/675/maxAge/1/noanimate/{url}') as r:
             res = await r.read()
             embed.set_image(url="attachment://pp.png")
             end = time.perf_counter()
@@ -165,7 +151,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command(aliases=["mystbin"])
     @commands.cooldown(1, 30, BucketType.user)
-    async def paste(self, ctx, paste: str = None):
+    async def paste(self, ctx, *, paste: str = None):
         """Pastes a file to mystbin, attempts to check for an attachment first, and if it cannot detect one, goes to text, and will error if it can't find that. You can also use codeblocks and it will detect text in that. Detects file extension."""
         if not paste and not ctx.message.attachments:
             return await ctx.send("You didn't provide anything to paste")
@@ -210,6 +196,7 @@ class FunCog(commands.Cog, name="Fun"):
 
     @commands.command()
     async def xkcd(self, ctx, comic: int):
+        """Returns an xkcd comic with the given number"""
         async with self.bot.session.get(f"http://xkcd.com/{comic}/info.0.json") as res:
             if res.status == 404:
                 raise commands.BadArgument("Comic must be valid")

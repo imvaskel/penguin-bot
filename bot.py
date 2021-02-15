@@ -11,7 +11,7 @@ startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun'
                       'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
                       'cogs.settings', 'cogs.checks',
                       'listeners.errors', 'listeners.guilds', 'listeners.moderation',
-                      'listeners.reactionroles', 'listeners.welcomer']
+                      'listeners.reactionroles', 'listeners.welcomer', 'listeners.logging']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
