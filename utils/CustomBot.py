@@ -1,14 +1,23 @@
-import json
-
-import discord
-import asyncpg
 import asyncio
-import toml
-from discord.ext import commands, ipc
 import datetime as dt
+import json
+import logging
+
 import aiohttp
-from utils.CustomContext import PenguinContext
+import mystbin
+import asyncpg
+import discord
+import toml
 from asyncdagpi import Client
+from discord.ext import commands, ipc
+
+from utils.CustomContext import PenguinContext
+
+STARTUP_EXTENSIONS = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
+                      'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
+                      'cogs.settings', 'cogs.checks',
+                      'listeners.errors', 'listeners.guilds', 'listeners.moderation',
+                      'listeners.reactionroles', 'listeners.welcomer', 'listeners.logging']
 
 intents = discord.Intents.default()
 intents.members = True
@@ -39,6 +48,8 @@ class PenguinBot(commands.AutoShardedBot):
                              type=discord.ActivityType.listening, name="@Penguin"),
                          owner_ids = {447422100798570496},
                          **kwargs)
+
+        self._logger = logging.getLogger(__name__)
 
         self.loop = asyncio.get_event_loop()
         self.session = aiohttp.ClientSession()
@@ -83,6 +94,7 @@ class PenguinBot(commands.AutoShardedBot):
         self.get_announcement()
         self.dagpi_client = Client(self.config['dagpi'])
         self.command_stats = {}
+        self.mystbin = mystbin.Client()
 
     async def on_ipc_ready(self):
         print("ipc ready")
@@ -94,6 +106,15 @@ class PenguinBot(commands.AutoShardedBot):
                            "welcomeId": record["welcomeid"], "logId": record['log_id']}
         }
         return d
+
+    async def on_ready(self):
+        print(
+            "Logged in! \n"
+            f"{'-' * 20}\n"
+            f"Bot Name: {bot.user} \n"
+            f"Bot ID: {bot.user.id} \n"
+            f"{'-' * 20}"
+        )
 
     async def refresh_cache(self):
         records = await self.db.fetch("SELECT * FROM guild_config")
@@ -123,3 +144,14 @@ class PenguinBot(commands.AutoShardedBot):
     def get_announcement(self):
         with open('announcement.txt', 'r') as file:
             self.announcement = file.read()
+
+    def load_cogs(self):
+        logger = logging.getLogger("cogs")
+
+        for extension in STARTUP_EXTENSIONS:
+            try:
+                self.load_extension(extension)
+                logger.info(f"Loaded extension {extension}")
+            except Exception as e:
+                exc = '{}: {}'.format(type(e).__name__, e)
+                logger.error('Failed to load extension {}\n{}'.format(extension, exc))

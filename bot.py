@@ -1,43 +1,19 @@
-import discord
-from discord.ext import commands, ipc
+import logging
+import coloredlogs
 import os
-import mystbin
-from asyncdagpi import Client
+
 from utils.CustomBot import PenguinBot
 from utils.CustomErrors import *
-
-startup_extensions = ['cogs.members', 'cogs.owner', 'cogs.moderator', 'cogs.fun', "jishaku", "cogs.mute",
-                      'cogs.animals', 'listeners.listener', 'cogs.help_command', 'cogs.images',
-                      'cogs.settings', 'cogs.checks',
-                      'listeners.errors', 'listeners.guilds', 'listeners.moderation',
-                      'listeners.reactionroles', 'listeners.welcomer', 'listeners.logging']
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_HIDE"] = "True"
 
-intents = discord.Intents.default()
-intents.members = True
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+coloredlogs.install(fmt="%(asctime)s | %(name)s | %(levelname)s > %(message)s")
 
 bot = PenguinBot()
 
-@bot.event
-async def on_ready():
-    print(
-        "Logged in! \n"
-        f"{'-' * 20}\n"
-        f"Bot Name: {bot.user} \n"
-        f"Bot ID: {bot.user.id} \n"
-        f"{'-' * 20}"
-    )
-
-bot.mystbin = mystbin.Client()
-
 if __name__ == "__main__":
     bot.ipc.start()
-    for extension in startup_extensions:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
     bot.run(bot.config['token'])

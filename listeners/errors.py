@@ -82,7 +82,7 @@ class ErrorHandler(Cog, name="Errors"):
 
             webhook = discord.Webhook.from_url(self.bot.config['webhook-url'], adapter=discord.AsyncWebhookAdapter(self.bot.session))
 
-            await webhook.send(embed=embed, avatar_url=str(ctx.author.avatar_url), username="Error Occured")
+            await webhook.send(embed=embed, avatar_url=str(ctx.author.avatar_url), username="Error Occurred")
 
 
 def setup(bot):
