@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands, ipc
 import os
-import configparser
 import mystbin
 from asyncdagpi import Client
 from utils.CustomBot import PenguinBot
@@ -19,9 +18,6 @@ os.environ["JISHAKU_HIDE"] = "True"
 intents = discord.Intents.default()
 intents.members = True
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
 bot = PenguinBot()
 
 @bot.event
@@ -35,15 +31,6 @@ async def on_ready():
     )
 
 bot.mystbin = mystbin.Client()
-
-
-@bot.event
-async def on_error(event, *args, **kwargs):
-    ignored_events = ["on_member_join", "on_message", "on_raw_reaction_add"]
-    if event in ignored_events:
-        return
-    else:
-        raise
 
 if __name__ == "__main__":
     bot.ipc.start()

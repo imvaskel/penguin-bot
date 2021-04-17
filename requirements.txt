@@ -1,0 +1,14 @@
+asyncdagpi
+asyncpg
+coloredlogs
+discord-ext-ipc
+discord-ext-menus @ git+https://github.com/Rapptz/discord-ext-menus@6f2b873bf0d28903eb752aa1166b3aac26dc9007
+discord-flags==2.1.1
+humanize==3.2.0
+jishaku @ git+https://github.com/Gorialis/jishaku@98a4e0f2f186d961231db20b61cee80450f69fb9
+Markdown==3.3.3
+MarkupSafe==1.1.1
+mystbin.py==1.0.1
+Pillow==8.0.1
+polaroid==0.3.1
+prettify.py @ git+https://github.com/ShineyDev/prettify.py@735d007b72f06256b3c4dfc4692f32a1011315db
