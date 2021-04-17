@@ -96,6 +96,8 @@ class PenguinBot(commands.AutoShardedBot):
         self.command_stats = {}
         self.mystbin = mystbin.Client()
 
+        self.load_cogs()
+
     async def on_ipc_ready(self):
         print("ipc ready")
 
@@ -111,8 +113,8 @@ class PenguinBot(commands.AutoShardedBot):
         print(
             "Logged in! \n"
             f"{'-' * 20}\n"
-            f"Bot Name: {bot.user} \n"
-            f"Bot ID: {bot.user.id} \n"
+            f"Bot Name: {self.user} \n"
+            f"Bot ID: {self.user.id} \n"
             f"{'-' * 20}"
         )
 

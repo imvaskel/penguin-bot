@@ -13,3 +13,4 @@ Pillow==8.0.1
 polaroid==0.3.1
 prettify.py @ git+https://github.com/ShineyDev/prettify.py@735d007b72f06256b3c4dfc4692f32a1011315db
 psutil
+toml
